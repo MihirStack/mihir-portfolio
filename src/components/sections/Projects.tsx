@@ -18,6 +18,9 @@ import {
   Layers,
   Database,
   Globe,
+  Github,
+  HeartPulse,
+  Factory,
 } from "lucide-react";
 
 const MODULES = [
@@ -38,6 +41,45 @@ const TECH_HIGHLIGHTS = [
   { icon: Database, label: "50+ Database Models", desc: "Normalized relational schema with complex joins" },
   { icon: Globe, label: "Dynamic DB Routing", desc: "LRU-cached connection pooling per tenant" },
   { icon: Shield, label: "Secure Auth", desc: "JWT + RBAC with module-level access control" },
+];
+
+const MORE_PROJECTS = [
+  {
+    icon: HeartPulse,
+    company: "Codebrain Infotech",
+    title: "HRMS Platform",
+    color: "#06b6d4",
+    challenge:
+      "Centralize attendance, leave, and employee operations with real-time notifications.",
+    solution:
+      "Built an HRMS with attendance and leave workflows, role-aware dashboards, exportable reports, and Firebase Cloud Messaging for live updates.",
+    impact: "Adopted internally for day-to-day workforce management.",
+    tech: ["Node.js", "Express.js", "React.js", "Firebase", "MongoDB", "JWT"],
+  },
+  {
+    icon: Factory,
+    company: "DI Solutions",
+    title: "Medical & Manufacturing ERP",
+    color: "#8b5cf6",
+    challenge:
+      "Run multiple business domains — medical, manufacturing, ecommerce, and POS — on one stack.",
+    solution:
+      "Delivered purchase, inventory, and shipment modules with real-time flows via Socket.IO, Redis caching, and multi-gateway checkout.",
+    impact: "Multi-region payments through Razorpay, Stripe, and PayPal.",
+    tech: ["Node.js", "Sequelize", "MySQL", "Redis", "Socket.IO", "Stripe", "PayPal"],
+  },
+  {
+    icon: Globe,
+    company: "DI Solutions",
+    title: "Ecommerce & POS Suite",
+    color: "#10b981",
+    challenge:
+      "Unify online storefront and in-store point-of-sale under shared inventory.",
+    solution:
+      "Built ecommerce checkout and a POS billing flow on a shared catalog and inventory engine with an admin dashboard for operations.",
+    impact: "Consistent stock and pricing across online and offline sales.",
+    tech: ["React.js", "Node.js", "MySQL", "Razorpay", "JWT", "REST APIs"],
+  },
 ];
 
 export default function Projects() {
@@ -118,7 +160,7 @@ export default function Projects() {
                   <div>
                     <div className="text-lg font-black text-white">AksharPOS ERP</div>
                     <div className="text-xs text-white/40">
-                      Multi-Tenant SaaS · Production · 2022–Present
+                      Multi-Tenant SaaS · Production · @ Logicode
                     </div>
                   </div>
                 </div>
@@ -190,7 +232,7 @@ export default function Projects() {
                 { value: "50+", label: "Database Models" },
                 { value: "10+", label: "ERP Modules" },
                 { value: "100%", label: "Multi-Tenant" },
-                { value: "3+", label: "Years in Production" },
+                { value: "RBAC", label: "Module-Level Auth" },
               ].map(({ value, label }) => (
                 <div key={label} className="text-center">
                   <div className="text-xl font-black gradient-text">{value}</div>
@@ -258,6 +300,99 @@ export default function Projects() {
                 )}
               </div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* More projects */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="mt-16"
+        >
+          <div className="section-label mb-2">Selected Work</div>
+          <h3 className="text-2xl font-black text-white mb-8">
+            More Things I&apos;ve <span className="gradient-text">Shipped</span>
+          </h3>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {MORE_PROJECTS.map(
+              ({ icon: Icon, company, title, color, challenge, solution, impact, tech }, i) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.6 + i * 0.12 }}
+                  className="group relative flex flex-col rounded-2xl p-6 transition-all hover:-translate-y-1"
+                  style={{
+                    background: "rgba(255,255,255,0.025)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                  }}
+                >
+                  {/* Top accent */}
+                  <div
+                    className="absolute inset-x-0 top-0 h-1 rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity"
+                    style={{ background: `linear-gradient(90deg, ${color}, transparent)` }}
+                  />
+
+                  <div className="flex items-center justify-between mb-4">
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center"
+                      style={{
+                        background: `${color}15`,
+                        border: `1px solid ${color}30`,
+                        boxShadow: `0 0 16px ${color}15`,
+                      }}
+                    >
+                      <Icon size={18} style={{ color }} />
+                    </div>
+                    <div className="flex items-center gap-2 text-white/25">
+                      <Github size={14} className="hover:text-white/60 transition-colors cursor-pointer" />
+                      <ExternalLink size={14} className="hover:text-white/60 transition-colors cursor-pointer" />
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] uppercase tracking-widest text-white/30 mb-1">
+                    {company}
+                  </div>
+                  <h4 className="text-base font-bold text-white mb-4">{title}</h4>
+
+                  <div className="space-y-3 flex-1">
+                    {[
+                      { k: "Challenge", v: challenge },
+                      { k: "Solution", v: solution },
+                      { k: "Impact", v: impact },
+                    ].map(({ k, v }) => (
+                      <div key={k}>
+                        <div
+                          className="text-[10px] font-semibold uppercase tracking-wider mb-0.5"
+                          style={{ color: `${color}cc` }}
+                        >
+                          {k}
+                        </div>
+                        <p className="text-xs text-white/50 leading-relaxed">{v}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 mt-5 pt-4 border-t border-white/5">
+                    {tech.map((t) => (
+                      <span
+                        key={t}
+                        className="text-[10px] px-2 py-0.5 rounded-md"
+                        style={{
+                          background: "rgba(255,255,255,0.04)",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "rgba(255,255,255,0.6)",
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              )
+            )}
           </div>
         </motion.div>
       </div>

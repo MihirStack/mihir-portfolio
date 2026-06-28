@@ -69,8 +69,8 @@ const FLOATING_CARDS = [
 
 const TECH_STACK = [
   "Node.js", "TypeScript", "React", "Next.js",
-  "MySQL", "Sequelize", "NGINX", "PM2",
-  "Razorpay", "GitHub Actions",
+  "MySQL", "MongoDB", "Redis", "Socket.IO",
+  "Razorpay", "Stripe",
 ];
 
 const MODULE_BADGES = [
@@ -165,18 +165,28 @@ export default function Hero() {
               </div>
             </motion.div>
 
-            {/* Headline */}
+            {/* Name headline */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1 }}
               className="text-display font-black text-white mb-4"
             >
-              Building{" "}
-              <span className="gradient-text">Enterprise SaaS</span>
+              Mihir
               <br />
-              Systems That Scale
+              <span className="gradient-text">Borsaniya</span>
             </motion.h1>
+
+            {/* Role + value proposition */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="text-lg sm:text-xl font-semibold text-white/85 mb-3"
+            >
+              Full Stack Engineer building{" "}
+              <span className="text-indigo-300">enterprise SaaS systems that scale.</span>
+            </motion.p>
 
             {/* Subheadline */}
             <motion.p

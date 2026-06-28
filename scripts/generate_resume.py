@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
-"""Generate Mihir Borsaniya's resume PDF for the portfolio."""
+"""Generate Mihir Borsaniya's one-page resume PDF for the portfolio.
+
+Content mirrors src/data/portfolio.ts (the single source of truth). When you
+update the portfolio data, update this file too and re-run it so the
+downloadable PDF matches the website exactly:
+
+    python scripts/generate_resume.py
+"""
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable, Flowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
@@ -22,7 +29,7 @@ styles = getSampleStyleSheet()
 
 name_style = ParagraphStyle(
     "Name", parent=styles["Title"], fontName="Helvetica-Bold",
-    fontSize=24, textColor=INK, leading=27, spaceAfter=2, alignment=TA_CENTER,
+    fontSize=23, textColor=INK, leading=26, spaceAfter=2, alignment=TA_CENTER,
 )
 title_style = ParagraphStyle(
     "JobTitle", parent=styles["Normal"], fontName="Helvetica-Bold",
@@ -34,31 +41,35 @@ contact_style = ParagraphStyle(
 )
 section_style = ParagraphStyle(
     "Section", parent=styles["Heading2"], fontName="Helvetica-Bold",
-    fontSize=11, textColor=INDIGO, leading=14, spaceBefore=10, spaceAfter=3,
+    fontSize=10.5, textColor=INDIGO, leading=13, spaceBefore=8, spaceAfter=3,
 )
 body_style = ParagraphStyle(
     "Body", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=9, textColor=INK, leading=13, alignment=TA_LEFT,
+    fontSize=8.8, textColor=INK, leading=12.5, alignment=TA_LEFT,
 )
 bullet_style = ParagraphStyle(
     "Bullet", parent=body_style, leftIndent=10, bulletIndent=0,
-    spaceAfter=2, fontSize=9, leading=12.5,
+    spaceAfter=1.5, fontSize=8.8, leading=12,
 )
 role_style = ParagraphStyle(
     "Role", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=10, textColor=INK, leading=13,
+    fontSize=9.8, textColor=INK, leading=12.5,
 )
 meta_style = ParagraphStyle(
     "Meta", parent=styles["Normal"], fontName="Helvetica-Oblique",
-    fontSize=8.5, textColor=LIGHT, leading=12,
+    fontSize=8.3, textColor=LIGHT, leading=12,
+)
+company_style = ParagraphStyle(
+    "Company", parent=styles["Normal"], fontName="Helvetica",
+    fontSize=8.6, textColor=SLATE, leading=11.5, spaceAfter=1,
 )
 skill_label = ParagraphStyle(
     "SkillLabel", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=9, textColor=VIOLET, leading=12,
+    fontSize=8.8, textColor=VIOLET, leading=11.5,
 )
 skill_val = ParagraphStyle(
     "SkillVal", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=9, textColor=INK, leading=12.5,
+    fontSize=8.8, textColor=INK, leading=11.5,
 )
 
 
@@ -74,99 +85,110 @@ def bullets(items):
     return [Paragraph(f"&bull;&nbsp;&nbsp;{t}", bullet_style) for t in items]
 
 
+def role_row(role, period):
+    row = Table(
+        [[Paragraph(role, role_style), Paragraph(period, meta_style)]],
+        colWidths=[125 * mm, 53 * mm],
+    )
+    row.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("ALIGN", (1, 0), (1, 0), "RIGHT"),
+        ("TOPPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    return row
+
+
 def build(path):
     doc = SimpleDocTemplate(
         path, pagesize=A4,
         leftMargin=16 * mm, rightMargin=16 * mm,
-        topMargin=12 * mm, bottomMargin=12 * mm,
+        topMargin=11 * mm, bottomMargin=11 * mm,
         title="Mihir Borsaniya - Resume",
         author="Mihir Borsaniya",
-        subject="Full Stack ERP Engineer Resume",
+        subject="Full Stack Engineer Resume",
     )
     s = []
 
-    # Header
+    # ---- Header ----
     s.append(Paragraph("MIHIR BORSANIYA", name_style))
-    s.append(Paragraph("Full Stack ERP Engineer &amp; Multi-Tenant SaaS Architect", title_style))
+    s.append(Paragraph("Full Stack Engineer", title_style))
     s.append(Paragraph(
-        "Gujarat, India &nbsp;|&nbsp; developermihir13@gmail.com &nbsp;|&nbsp; "
+        "Surat, Gujarat, India &nbsp;|&nbsp; developermihir13@gmail.com &nbsp;|&nbsp; "
         "+91 75758 96243 &nbsp;|&nbsp; "
-        '<link href="https://github.com/mihirborsaniya"><font color="#4f46e5">github.com/mihirborsaniya</font></link>'
+        '<link href="https://github.com/MihirStack"><font color="#4f46e5">github.com/MihirStack</font></link>'
         " &nbsp;|&nbsp; "
         '<link href="https://linkedin.com/in/mihirborsaniya"><font color="#4f46e5">linkedin.com/in/mihirborsaniya</font></link>',
         contact_style,
     ))
-    s.append(Spacer(1, 6))
+    s.append(Spacer(1, 5))
     s.append(HRFlowable(width="100%", thickness=1.2, color=INDIGO, spaceAfter=2))
 
-    # Summary
+    # ---- Summary ----
     s += section("Professional Summary")
     s.append(Paragraph(
-        "Full Stack ERP Engineer with 3+ years of experience designing and building "
-        "enterprise-grade, multi-tenant SaaS platforms. Specialized in production-grade "
-        "backend architectures, payment infrastructure, and end-to-end DevOps ownership. "
-        "Architected and shipped AksharPOS ERP — a multi-tenant retail/POS platform with "
-        "50+ database models and 10+ integrated business modules running in production.",
+        "Full Stack Engineer with 3+ years building production ERP and multi-tenant SaaS "
+        "platforms end to end. Designs REST APIs, models relational schemas, and owns "
+        "deployments on Linux VPS with NGINX, PM2, and CI/CD. Strong across Node.js, Express, "
+        "React, TypeScript, and MySQL, with hands-on payment-gateway and real-time integrations. "
+        "Focused on secure, performant systems &mdash; JWT, RBAC, query optimization, caching, "
+        "and zero-downtime releases.",
         body_style,
     ))
 
-    # Experience
+    # ---- Experience ----
     s += section("Experience")
 
     exp = [
-        ("Full Stack ERP Engineer — AksharPOS ERP Platform", "2024 – Present", [
-            "Architected multi-tenant SaaS infrastructure with per-tenant database isolation and dynamic, LRU-cached connection routing.",
-            "Designed subscription-based feature gating and automated tenant onboarding (DB provisioning + seed data) in under 30 seconds.",
-            "Owned production deployment on Linux VPS: NGINX reverse proxy, PM2 cluster mode, SSL, and GitHub Actions CI/CD pipelines.",
+        ("Full Stack Engineer", "Logicode Software LLP", "Jan 2026 – Present", [
+            "Architected a multi-tenant SaaS platform (AksharPOS) with per-tenant database isolation and dynamic, LRU-cached connection routing.",
+            "Built 50+ normalized MySQL models across 10+ ERP modules; secured the API with JWT and module-level RBAC.",
+            "Automated deployment on Linux VPS (NGINX, PM2 cluster, GitHub Actions CI/CD) and integrated Razorpay with webhook verification; added Redis caching to cut hot-path query load.",
         ]),
-        ("ERP & POS Software Engineer", "2023 – 2024", [
-            "Built POS billing, inventory, purchase, sales, customer, supplier, branch, and loyalty modules from scratch.",
-            "Integrated Razorpay payments with HMAC webhook verification, idempotency handling, and daily reconciliation reports.",
-            "Modeled 50+ normalized MySQL tables with transaction management for complex business workflows.",
+        ("Full Stack Developer", "Codebrain Infotech", "Jul 2025 – Jan 2026", [
+            "Built an HRMS covering attendance, leave, and employee management with role-aware React dashboards (Redux Toolkit, React Query).",
+            "Developed REST APIs on Node.js, Sequelize, and MySQL with authentication and authorization.",
+            "Integrated Firebase Cloud Messaging for a real-time employee notification system.",
         ]),
-        ("Full Stack Developer", "2022 – 2023", [
-            "Developed REST APIs with Node.js &amp; Express, secured with JWT authentication and role-based access control (RBAC).",
-            "Built responsive React.js frontends with Redux Toolkit and React Query against a MySQL + Sequelize backend.",
+        ("Full Stack Developer", "DI Solutions", "Jul 2023 – Jun 2025", [
+            "Delivered 10+ modules across Manufacturing ERP, Medical ERP, POS, and e-commerce following MVC architecture.",
+            "Built inventory, purchase, sales, shipment, and logistics features with React, Node.js, Express, and Sequelize/MySQL.",
+            "Integrated Razorpay, Stripe, and PayPal; added real-time updates with Socket.IO and Swagger-documented APIs.",
         ]),
     ]
-    for role, period, pts in exp:
-        row = Table(
-            [[Paragraph(role, role_style), Paragraph(period, meta_style)]],
-            colWidths=[125 * mm, 53 * mm],
-        )
-        row.setStyle(TableStyle([
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("LEFTPADDING", (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-            ("ALIGN", (1, 0), (1, 0), "RIGHT"),
-            ("TOPPADDING", (0, 0), (-1, -1), 1),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
-        ]))
-        s.append(row)
+    for role, company, period, pts in exp:
+        s.append(role_row(role, period))
+        s.append(Paragraph(company, company_style))
         s += bullets(pts)
-        s.append(Spacer(1, 4))
+        s.append(Spacer(1, 3))
 
-    # Flagship project
-    s += section("Flagship Project — AksharPOS ERP")
-    s.append(Paragraph(
-        "<b>Enterprise Multi-Tenant ERP Platform</b> for retail, wholesale, and POS businesses. "
-        "10+ integrated modules: POS Billing, Inventory, Purchase, Sales, Customer &amp; Supplier "
-        "Management, Loyalty, Branch Management, Payments, and Reporting &amp; Analytics. "
-        "Multi-tenant architecture with tenant isolation, dynamic DB connections, 50+ models, "
-        "JWT + RBAC security, and live production deployments.",
-        body_style,
-    ))
+    # ---- Projects ----
+    s += section("Projects")
+    projects = [
+        ("AksharPOS ERP (Logicode)",
+         "Multi-tenant ERP/POS SaaS &mdash; shared API with per-tenant MySQL DBs, 50+ models, "
+         "10+ modules, sub-30-second tenant onboarding, live in production."),
+        ("HRMS Platform (Codebrain)",
+         "Attendance, leave, and employee management with role-aware dashboards and Firebase "
+         "real-time notifications."),
+        ("Multi-Domain ERP &amp; Commerce (DI Solutions)",
+         "Manufacturing/Medical ERP, POS, and e-commerce on shared inventory with Socket.IO "
+         "real-time flows and Razorpay/Stripe/PayPal checkout."),
+    ]
+    for name, desc in projects:
+        s.append(Paragraph(f"<b>{name}.</b> {desc}", bullet_style))
 
-    # Skills
+    # ---- Technical Skills ----
     s += section("Technical Skills")
     skill_rows = [
-        ("Backend", "Node.js, Express.js, REST APIs, JWT, RBAC, Middleware Architecture, Transactions, System Design"),
-        ("Frontend", "React.js, Next.js, TypeScript, JavaScript, Redux Toolkit, React Query, Tailwind CSS"),
-        ("Database", "MySQL, Sequelize ORM, Data Modeling, Query Optimization, Normalization, Multi-Tenant DBs"),
-        ("Payments", "Razorpay, UPI, Card Payments, Webhook Verification, Reconciliation, Idempotency"),
-        ("DevOps", "Linux/Ubuntu, NGINX, PM2, GitHub Actions, CI/CD, SSL, VPS Hosting, Production Deployment"),
-        ("Architecture", "Multi-Tenant SaaS, Tenant Isolation, Dynamic DB Routing, LRU Caching, Scalability"),
-        ("Version Control", "Git, GitHub, Pull Requests, Branch Strategy, Code Reviews"),
+        ("Languages", "JavaScript, TypeScript"),
+        ("Frontend", "React.js, Next.js, Redux Toolkit, React Query, Tailwind CSS, Bootstrap"),
+        ("Backend", "Node.js, Express.js, REST APIs, Socket.IO, MVC Architecture"),
+        ("Database", "MySQL, MongoDB, Redis, Sequelize ORM, Firebase"),
+        ("Auth & Payments", "JWT, OAuth, RBAC  ·  Razorpay, Stripe, PayPal"),
+        ("DevOps & Tools", "Linux, NGINX, PM2, GitHub Actions, CI/CD  ·  Git, GitHub, Postman, Swagger"),
     ]
     data = [[Paragraph(k, skill_label), Paragraph(v, skill_val)] for k, v in skill_rows]
     tbl = Table(data, colWidths=[30 * mm, 148 * mm])
@@ -174,18 +196,18 @@ def build(path):
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 2),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+        ("TOPPADDING", (0, 0), (-1, -1), 1.5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
     ]))
     s.append(tbl)
 
-    # Highlights
-    s += section("Key Engineering Highlights")
-    s += bullets([
-        "Zero cross-tenant data leakage with ~40ms tenant-resolution overhead via cached Sequelize connection pooling.",
-        "Reduced deployment time from 30 minutes (manual) to ~4 minutes (automated) with zero-downtime PM2 graceful reloads.",
-        "Cryptographically verified all payment webhooks before any DB write; zero reconciliation issues in production.",
-    ])
+    # ---- Education ----
+    s += section("Education")
+    s.append(Paragraph(
+        "<b>Master of Computer Applications (MCA)</b> &mdash; Information Technology &nbsp;&nbsp;|&nbsp;&nbsp; "
+        "<b>Bachelor of Commerce (B.Com)</b>",
+        body_style,
+    ))
 
     doc.build(s)
     print(f"Resume written to {path}")

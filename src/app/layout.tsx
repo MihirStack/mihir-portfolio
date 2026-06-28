@@ -108,7 +108,17 @@ export default function RootLayout({
               "@type": "Person",
               name: "Mihir Borsaniya",
               url: "https://mihirborsaniya.dev",
-              jobTitle: "Full Stack ERP Engineer",
+              jobTitle: "Full Stack Engineer",
+              worksFor: {
+                "@type": "Organization",
+                name: "Logicode Software LLP",
+              },
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Surat",
+                addressRegion: "Gujarat",
+                addressCountry: "IN",
+              },
               description:
                 "Full Stack ERP Engineer specializing in multi-tenant SaaS platforms, enterprise ERP systems, and production-grade backend architectures.",
               knowsAbout: [
@@ -123,7 +133,7 @@ export default function RootLayout({
                 "Razorpay",
               ],
               sameAs: [
-                "https://github.com/mihirborsaniya",
+                "https://github.com/MihirStack",
                 "https://linkedin.com/in/mihirborsaniya",
               ],
             }),

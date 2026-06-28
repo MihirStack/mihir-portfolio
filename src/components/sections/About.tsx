@@ -79,42 +79,6 @@ const COLOR_MAP = {
   },
 };
 
-const TIMELINE = [
-  {
-    year: "2022",
-    phase: "Year 1 — Foundation",
-    items: [
-      "Joined as Full Stack Developer",
-      "Built REST APIs with Node.js & Express",
-      "Developed React frontends with Redux Toolkit",
-      "Integrated MySQL with Sequelize ORM",
-    ],
-    color: "#6366f1",
-  },
-  {
-    year: "2023",
-    phase: "Year 2 — ERP Specialist",
-    items: [
-      "Architected POS billing system from scratch",
-      "Built inventory & purchase management modules",
-      "Designed loyalty program and customer management",
-      "Integrated Razorpay payment gateway",
-    ],
-    color: "#8b5cf6",
-  },
-  {
-    year: "2024",
-    phase: "Year 3 — SaaS Architect",
-    items: [
-      "Designed multi-tenant SaaS architecture",
-      "Implemented dynamic database routing per tenant",
-      "Set up NGINX, PM2, and VPS deployment pipelines",
-      "Built subscription management and tenant isolation",
-    ],
-    color: "#06b6d4",
-  },
-];
-
 export default function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
 
@@ -144,9 +108,9 @@ export default function About() {
             <span className="gradient-text">Builds for Production</span>
           </h2>
           <p className="text-white/50 text-lg leading-relaxed max-w-2xl">
-            I&apos;m Mihir Borsaniya — a Full Stack ERP Engineer with 3+ years of experience
-            designing and building enterprise-grade SaaS systems that solve real business
-            problems at scale.
+            I&apos;m Mihir Borsaniya — a Full Stack Engineer with 3+ years building
+            production ERP and multi-tenant SaaS platforms end to end, from REST API and
+            database design through to deployment and monitoring.
           </p>
         </motion.div>
 
@@ -166,8 +130,9 @@ export default function About() {
                 performance?
               </p>
               <p>
-                Over 3 years, I evolved from writing APIs to architecting entire platforms.
-                My flagship project,{" "}
+                Over 3 years and three companies, I evolved from writing APIs to
+                architecting entire platforms — shipping software across Medical and
+                Manufacturing ERP, HRMS, ecommerce, and POS. My current flagship,{" "}
                 <span className="text-indigo-400 font-medium">AksharPOS ERP</span>, is a
                 multi-tenant SaaS platform serving retail, wholesale, and POS businesses
                 with 10+ integrated modules — from billing and inventory to loyalty
@@ -245,66 +210,6 @@ export default function About() {
             })}
           </motion.div>
         </div>
-
-        {/* Timeline */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="mt-20"
-        >
-          <h3 className="text-lg font-bold text-white mb-8">
-            Professional Journey
-          </h3>
-          <div className="relative">
-            <div
-              className="absolute left-6 top-0 bottom-0 w-px"
-              style={{
-                background:
-                  "linear-gradient(180deg, #6366f1, #8b5cf6, #06b6d4, transparent)",
-              }}
-            />
-            <div className="space-y-8">
-              {TIMELINE.map(({ year, phase, items, color }, i) => (
-                <motion.div
-                  key={year}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.6 + i * 0.15 }}
-                  className="relative pl-16"
-                >
-                  <div
-                    className="absolute left-[18px] top-1 w-4 h-4 rounded-full border-2 border-background flex items-center justify-center"
-                    style={{ background: color, boxShadow: `0 0 12px ${color}60` }}
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/80" />
-                  </div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span
-                      className="text-xs font-mono font-bold px-2 py-0.5 rounded"
-                      style={{
-                        color,
-                        background: `${color}15`,
-                        border: `1px solid ${color}30`,
-                      }}
-                    >
-                      {year}
-                    </span>
-                    <span className="text-sm font-semibold text-white">{phase}</span>
-                  </div>
-                  <ul className="space-y-1">
-                    {items.map((item) => (
-                      <li key={item} className="text-sm text-white/50 flex items-start gap-2">
-                        <span className="mt-1.5 w-1 h-1 rounded-full bg-white/30 flex-shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

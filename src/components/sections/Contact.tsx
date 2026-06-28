@@ -22,7 +22,7 @@ const CONTACT_LINKS = [
     icon: Mail,
     label: "Email",
     value: "developermihir13@gmail.com",
-    href: "mailto:developermihi13@gmail.com",
+    href: "mailto:developermihir13@gmail.com",
     color: "#6366f1",
     desc: "Best for project inquiries",
   },
@@ -37,8 +37,8 @@ const CONTACT_LINKS = [
   {
     icon: Github,
     label: "GitHub",
-    value: "github.com/mihirborsaniya",
-    href: "https://github.com/mihirborsaniya",
+    value: "github.com/MihirStack",
+    href: "https://github.com/MihirStack",
     color: "#8b5cf6",
     desc: "See my code & contributions",
   },
@@ -62,6 +62,8 @@ const AVAILABILITY = [
 export default function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  // Honeypot — hidden from real users, catches bots.
+  const [company, setCompany] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -72,12 +74,30 @@ export default function Contact() {
       return;
     }
     setSending(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    setSending(false);
-    setSent(true);
-    toast.success("Message sent! I'll respond within 24 hours.");
-    setForm({ name: "", email: "", subject: "", message: "" });
-    setTimeout(() => setSent(false), 4000);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, company }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong.");
+      }
+
+      setSent(true);
+      toast.success("Message sent! I'll respond within 24 hours.");
+      setForm({ name: "", email: "", subject: "", message: "" });
+      setTimeout(() => setSent(false), 4000);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong.";
+      toast.error(
+        `${msg} You can also email me directly at developermihir13@gmail.com.`
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -244,6 +264,18 @@ export default function Contact() {
               }}
             >
               <div className="text-base font-bold text-white mb-2">Send a Message</div>
+
+              {/* Honeypot — hidden from users, ignored by them, filled by bots */}
+              <input
+                type="text"
+                name="company"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute -left-[9999px] h-0 w-0 opacity-0"
+              />
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>

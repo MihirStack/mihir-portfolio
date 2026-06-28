@@ -47,11 +47,16 @@ const REPOS = [
   },
 ];
 
+// Deterministic pseudo-random so server and client render identically (no hydration mismatch).
+function seeded(wi: number, di: number) {
+  const x = Math.sin(wi * 374.761 + di * 91.337 + 1) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 const CONTRIBUTION_WEEKS = Array.from({ length: 53 }, (_, wi) =>
   Array.from({ length: 7 }, (_, di) => {
-    const rand = Math.random();
-    const dayOfWeek = di;
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const rand = seeded(wi, di);
+    const isWeekend = di === 0 || di === 6;
     const recentBoost = wi > 40 ? 1.3 : 1;
     const activity =
       rand < (isWeekend ? 0.3 : 0.55) * recentBoost
@@ -117,7 +122,7 @@ export default function GitHub() {
               </p>
             </div>
             <motion.a
-              href="https://github.com/mihirborsaniya"
+              href="https://github.com/MihirStack"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white/70 hover:text-white border border-white/10 hover:border-white/20 transition-all"

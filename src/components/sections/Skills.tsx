@@ -25,7 +25,10 @@ const SKILL_CATEGORIES = [
       { name: "Express.js", level: 95 },
       { name: "REST APIs", level: 92 },
       { name: "JWT Authentication", level: 90 },
+      { name: "OAuth 2.0", level: 85 },
       { name: "RBAC Systems", level: 88 },
+      { name: "Socket.IO (Real-time)", level: 85 },
+      { name: "Swagger / OpenAPI", level: 84 },
       { name: "Middleware Architecture", level: 90 },
       { name: "Transaction Management", level: 85 },
       { name: "Async Processing", level: 88 },
@@ -45,6 +48,7 @@ const SKILL_CATEGORIES = [
       { name: "Redux Toolkit", level: 88 },
       { name: "React Query", level: 82 },
       { name: "Tailwind CSS", level: 92 },
+      { name: "Bootstrap", level: 85 },
       { name: "Responsive Design", level: 90 },
       { name: "Performance Optimization", level: 80 },
       { name: "JavaScript (ES2022+)", level: 92 },
@@ -57,12 +61,14 @@ const SKILL_CATEGORIES = [
     color: "#8b5cf6",
     skills: [
       { name: "MySQL", level: 92 },
+      { name: "MongoDB", level: 85 },
+      { name: "Redis", level: 82 },
       { name: "Sequelize ORM", level: 90 },
+      { name: "Firebase", level: 84 },
       { name: "Database Design", level: 88 },
       { name: "Query Optimization", level: 85 },
       { name: "Data Modeling", level: 88 },
       { name: "Transactions & ACID", level: 85 },
-      { name: "Normalization", level: 87 },
       { name: "Multi-Tenant Databases", level: 85 },
     ],
   },
@@ -90,12 +96,14 @@ const SKILL_CATEGORIES = [
     color: "#f59e0b",
     skills: [
       { name: "Razorpay Integration", level: 90 },
+      { name: "Stripe Integration", level: 86 },
+      { name: "PayPal Integration", level: 84 },
       { name: "UPI Payments", level: 88 },
       { name: "Card Payments", level: 85 },
       { name: "Webhook Handling", level: 88 },
       { name: "Payment Reconciliation", level: 82 },
       { name: "Transaction Flows", level: 87 },
-      { name: "Multi-Payment Processing", level: 83 },
+      { name: "Multi-Gateway Processing", level: 85 },
     ],
   },
   {
@@ -277,10 +285,12 @@ export default function Skills() {
           <div className="flex flex-wrap gap-2">
             {[
               "Node.js", "Express.js", "TypeScript", "JavaScript", "React.js", "Next.js",
-              "Redux Toolkit", "React Query", "MySQL", "Sequelize ORM", "Tailwind CSS",
-              "Razorpay", "JWT", "RBAC", "NGINX", "PM2", "Linux", "GitHub Actions",
-              "Git", "REST APIs", "Webhooks", "LRU Cache", "Multi-Tenant", "SaaS",
-              "VPS", "SSL", "ERP", "POS", "Inventory", "Billing",
+              "Redux Toolkit", "React Query", "Tailwind CSS", "Bootstrap",
+              "MySQL", "MongoDB", "Redis", "Sequelize ORM", "Firebase",
+              "Razorpay", "Stripe", "PayPal", "Socket.IO", "JWT", "OAuth", "RBAC",
+              "REST APIs", "Swagger", "Webhooks", "Postman", "Git", "GitHub",
+              "NGINX", "PM2", "Linux", "GitHub Actions", "Multi-Tenant", "SaaS",
+              "ERP", "POS",
             ].map((tech, i) => (
               <motion.span
                 key={tech}
