@@ -281,7 +281,7 @@ export default function Hero() {
                     {inView ? (
                       <CountUp end={value} duration={2} suffix={suffix} />
                     ) : (
-                      "0" + suffix
+                      `${value}${suffix}`
                     )}
                   </div>
                   <div className="text-xs text-white/40 mt-0.5">{label}</div>

@@ -12,11 +12,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://mihirborsaniya.dev"),
   title: {
-    default: "Mihir Borsaniya — Full Stack ERP Engineer & SaaS Architect",
+    default: "Mihir Borsaniya — Full Stack Engineer | Enterprise ERP & SaaS",
     template: "%s | Mihir Borsaniya",
   },
   description:
-    "Full Stack ERP Engineer specializing in multi-tenant SaaS platforms, enterprise ERP systems, production-grade backend architectures, and DevOps. 3+ years building business-critical software.",
+    "Full Stack Engineer with 3+ years building production ERP and multi-tenant SaaS platforms end to end — REST APIs, MySQL, Node.js, React, payments, and CI/CD on Linux VPS.",
   keywords: [
     "Full Stack ERP Engineer",
     "SaaS Developer",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://mihirborsaniya.dev",
     siteName: "Mihir Borsaniya",
-    title: "Mihir Borsaniya — Full Stack ERP Engineer & SaaS Architect",
+    title: "Mihir Borsaniya — Full Stack Engineer | Enterprise ERP & SaaS",
     description:
       "Building enterprise ERP platforms, multi-tenant SaaS systems, and production-grade backend architectures. 3+ years of real-world engineering impact.",
     images: [
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mihir Borsaniya — Full Stack ERP Engineer & SaaS Architect",
+    title: "Mihir Borsaniya — Full Stack Engineer | Enterprise ERP & SaaS",
     description:
       "Building enterprise ERP platforms, multi-tenant SaaS systems, and production-grade backend architectures.",
     images: ["/og-image.png"],
