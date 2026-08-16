@@ -1,97 +1,145 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
+/**
+ * Two-part cursor: a crisp dot that tracks tightly, and a soft aurora halo
+ * that lags behind it. Over interactive elements the dot hollows out into a
+ * ring and the halo warms to the signature accent.
+ *
+ * Hidden entirely on coarse pointers (touch), where a fake cursor is noise.
+ */
 export default function CursorGlow() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const trailRef = useRef<HTMLDivElement>(null);
   const [isPointer, setIsPointer] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isDown, setIsDown] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
-  const springConfig = { damping: 20, stiffness: 300, mass: 0.5 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
+  const dotX = useSpring(mouseX, { damping: 28, stiffness: 900, mass: 0.28 });
+  const dotY = useSpring(mouseY, { damping: 28, stiffness: 900, mass: 0.28 });
 
-  const trailConfig = { damping: 40, stiffness: 150, mass: 1 };
-  const trailX = useSpring(mouseX, trailConfig);
-  const trailY = useSpring(mouseY, trailConfig);
+  const haloX = useSpring(mouseX, { damping: 34, stiffness: 130, mass: 1.1 });
+  const haloY = useSpring(mouseY, { damping: 34, stiffness: 130, mass: 1.1 });
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    if (typeof window.matchMedia !== "function") return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    setEnabled(true);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    let frame = 0;
+
+    const handleMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
       setIsVisible(true);
+
+      // Hit-test at most once per frame — querying computed styles on every
+      // mousemove was the expensive part of the old implementation.
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        if (!el) return;
+        const interactive = el.closest(
+          'a, button, input, textarea, select, [role="button"], [data-cursor="pointer"]'
+        );
+        setIsPointer(
+          Boolean(interactive) ||
+            window.getComputedStyle(el).cursor === "pointer"
+        );
+      });
     };
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
+    const show = () => setIsVisible(true);
+    const hide = () => setIsVisible(false);
+    const down = () => setIsDown(true);
+    const up = () => setIsDown(false);
 
-    const handlePointerDetect = () => {
-      const target = document.querySelector(":hover");
-      if (target) {
-        const style = window.getComputedStyle(target);
-        setIsPointer(style.cursor === "pointer");
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mousemove", handlePointerDetect);
-    document.addEventListener("mouseenter", handleMouseEnter);
-    document.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    window.addEventListener("mousedown", down);
+    window.addEventListener("mouseup", up);
+    document.addEventListener("mouseenter", show);
+    document.addEventListener("mouseleave", hide);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousemove", handlePointerDetect);
-      document.removeEventListener("mouseenter", handleMouseEnter);
-      document.removeEventListener("mouseleave", handleMouseLeave);
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("mousedown", down);
+      window.removeEventListener("mouseup", up);
+      document.removeEventListener("mouseenter", show);
+      document.removeEventListener("mouseleave", hide);
     };
-  }, [mouseX, mouseY]);
+  }, [enabled, mouseX, mouseY]);
+
+  if (!enabled) return null;
 
   return (
     <>
-      {/* Glow trail */}
+      {/* Aurora halo */}
       <motion.div
-        ref={trailRef}
         className="fixed pointer-events-none z-[9998] rounded-full"
         style={{
-          x: trailX,
-          y: trailY,
+          x: haloX,
+          y: haloY,
           translateX: "-50%",
           translateY: "-50%",
-          opacity: isVisible ? 1 : 0,
-          width: isPointer ? 60 : 40,
-          height: isPointer ? 60 : 40,
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
-          transition: "width 0.2s ease, height 0.2s ease, opacity 0.3s ease",
         }}
-      />
-      {/* Main cursor */}
+        animate={{
+          width: isPointer ? 240 : 170,
+          height: isPointer ? 240 : 170,
+          opacity: isVisible ? (isPointer ? 1 : 0.75) : 0,
+        }}
+        transition={{ type: "spring", stiffness: 180, damping: 26 }}
+      >
+        <div
+          className="w-full h-full rounded-full"
+          style={{
+            background: isPointer
+              ? "radial-gradient(circle, rgba(251,113,133,0.16) 0%, rgba(192,38,211,0.07) 45%, transparent 72%)"
+              : "radial-gradient(circle, rgba(99,102,241,0.14) 0%, rgba(139,92,246,0.06) 45%, transparent 72%)",
+            transition: "background 0.4s ease",
+            filter: "blur(4px)",
+          }}
+        />
+      </motion.div>
+
+      {/* Precision dot / ring */}
       <motion.div
-        ref={cursorRef}
         className="fixed pointer-events-none z-[9999] rounded-full"
         style={{
-          x: springX,
-          y: springY,
+          x: dotX,
+          y: dotY,
           translateX: "-50%",
           translateY: "-50%",
-          opacity: isVisible ? 1 : 0,
-          width: isPointer ? 12 : 8,
-          height: isPointer ? 12 : 8,
-          background: isPointer
-            ? "rgba(99,102,241,0.9)"
-            : "rgba(255,255,255,0.9)",
-          boxShadow: isPointer
-            ? "0 0 12px rgba(99,102,241,0.8)"
-            : "0 0 6px rgba(255,255,255,0.4)",
-          transition:
-            "width 0.2s ease, height 0.2s ease, background 0.2s ease, opacity 0.3s ease",
         }}
-      />
+        animate={{
+          width: isPointer ? 34 : 7,
+          height: isPointer ? 34 : 7,
+          opacity: isVisible ? 1 : 0,
+          scale: isDown ? 0.82 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 420, damping: 28 }}
+      >
+        <div
+          className="w-full h-full rounded-full"
+          style={{
+            background: isPointer ? "transparent" : "rgba(255,255,255,0.92)",
+            border: isPointer ? "1.5px solid rgba(251,146,133,0.9)" : "none",
+            boxShadow: isPointer
+              ? "0 0 18px rgba(251,113,133,0.5)"
+              : "0 0 10px rgba(255,255,255,0.35)",
+            transition: "background 0.2s ease, border 0.2s ease, box-shadow 0.3s ease",
+          }}
+        />
+      </motion.div>
     </>
   );
 }
