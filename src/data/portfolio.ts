@@ -22,11 +22,10 @@ export const PROFILE = {
 
 /** Professional summary — max 5 lines, ATS + recruiter friendly. */
 export const SUMMARY =
-  "Full Stack Engineer with 3+ years building production ERP and multi-tenant SaaS platforms end to end. " +
-  "I design REST APIs, model relational schemas, and own deployments on Linux VPS with NGINX, PM2, and CI/CD. " +
-  "Strong across Node.js, Express, React, TypeScript, and MySQL, with hands-on payment-gateway and real-time integrations. " +
-  "I focus on secure, performant systems — JWT, RBAC, query optimization, caching, and zero-downtime releases. " +
-  "Comfortable owning features from database design through to production monitoring.";
+  "Full Stack Engineer with 3+ years building and owning production ERP and multi-tenant SaaS platforms end to end — from API and schema design through deployment. " +
+  "Currently architecting AksharPOS, a multi-tenant SaaS product, with per-tenant database isolation and dynamic, cached connection routing. " +
+  "I work across Node.js, Express, React, TypeScript, and MySQL, with hands-on payment-gateway (Razorpay, Stripe, PayPal), messaging (WhatsApp Business API, Firebase, Socket.IO), and real-time integrations. " +
+  "I own Linux/NGINX/PM2 deployments with GitHub Actions CI/CD, and focus on secure, performant systems — JWT/RBAC, query and cache optimization, and zero-downtime releases.";
 
 export type Experience = {
   id: string;
@@ -49,30 +48,32 @@ export type Experience = {
 
 export const EXPERIENCES: Experience[] = [
   {
-    id: "logicode",
-    company: "Logicode Software LLP",
-    monogram: "L",
-    role: "Full Stack Engineer",
-    period: "Jan 2026 — Present",
+    id: "aksharpos",
+    company: "Codebrain Infotech → Logicode Software LLP",
+    monogram: "A",
+    role: "Full Stack Engineer — AksharPOS Product",
+    period: "Aug 2025 — Present",
     duration: "Current",
     location: "Surat, Gujarat",
     focus: "Enterprise ERP & Multi-Tenant SaaS",
-    description: "Product company building enterprise ERP and SaaS platforms.",
+    description:
+      "Product company building enterprise ERP and SaaS platforms. Registered as Logicode Software LLP in Jan 2026 — same team, same product throughout.",
     current: true,
     color: "#6366f1",
     summary:
-      "Architecting AksharPOS — a multi-tenant ERP SaaS platform serving retail, wholesale, and POS businesses with isolated per-tenant databases behind a shared, secured API layer.",
+      "Architecting AksharPOS — a multi-tenant ERP SaaS platform serving retail, wholesale, and POS businesses with isolated per-tenant databases behind a shared, secured API layer, plus an 18-template WhatsApp Business API messaging integration.",
     responsibilities: [
-      "Architect multi-tenant SaaS infrastructure with dynamic per-tenant database routing.",
+      "Architect multi-tenant SaaS infrastructure with dynamic, LRU-cached per-tenant database routing.",
       "Develop and document REST APIs powering the AksharPOS ERP platform.",
       "Implement JWT authentication and module-level role-based access control (RBAC).",
+      "Design an 18-template WhatsApp Business API library via Meta Business Manager for transactional and marketing messaging.",
       "Integrate Razorpay payment flows with secure webhook verification.",
-      "Own production deployment on Linux VPS with NGINX, PM2, and GitHub Actions CI/CD.",
+      "Own production deployment on Linux VPS with NGINX, PM2 cluster mode, and GitHub Actions CI/CD.",
     ],
     achievements: [
       "Modeled 50+ normalized MySQL tables backing 10+ integrated ERP modules.",
-      "Cut tenant onboarding to under 30 seconds via automated DB provisioning and seeding.",
-      "Reduced repeated query load on hot endpoints with Redis caching and SQL optimization.",
+      "Navigated Meta's approval workflow to get transactional WhatsApp templates classified as Utility rather than Marketing.",
+      "Reduced database load under concurrent multi-branch traffic with Redis caching on hot-path queries.",
     ],
     businessImpact:
       "Powers live retail, wholesale, and POS businesses on a single isolated multi-tenant platform.",
@@ -87,49 +88,33 @@ export const EXPERIENCES: Experience[] = [
       "JWT",
       "RBAC",
       "Razorpay",
+      "WhatsApp Business API",
       "NGINX",
       "PM2",
       "GitHub Actions",
     ],
   },
   {
-    id: "codebrain",
+    id: "codebrain-service",
     company: "Codebrain Infotech",
     monogram: "C",
-    role: "Full Stack Developer",
-    period: "Jul 2025 — Jan 2026",
-    duration: "7 mos",
+    role: "Full Stack Developer — Service-Based",
+    period: "Jul 2025 (1 month)",
+    duration: "1 mo",
     location: "Surat, Gujarat",
-    focus: "HRMS Platform & Workforce Tooling",
-    description: "IT services company delivering web platforms for business operations.",
+    focus: "Client Development",
+    description: "IT services company delivering client projects before transitioning to product work.",
     color: "#06b6d4",
     summary:
-      "Built a complete HRMS covering attendance, leave, and employee management, with role-aware dashboards and a real-time notification system powered by Firebase.",
+      "One month of service-based client development work before transitioning to full-time product engineering on AksharPOS.",
     responsibilities: [
-      "Built an HRMS covering attendance, leave, and employee management.",
-      "Developed REST APIs and React.js dashboards with Redux Toolkit and React Query.",
-      "Integrated Firebase for a real-time notification system.",
-      "Implemented authentication and authorization for role-aware access.",
+      "Delivered client development work under Codebrain Infotech's service engagements.",
     ],
     achievements: [
-      "Delivered end-to-end attendance and leave workflows adopted for internal HR operations.",
-      "Digitized employee records and approvals, reducing manual HR tracking.",
-      "Shipped real-time push notifications via Firebase Cloud Messaging.",
+      "Transitioned to full-time product engineering on AksharPOS after one month.",
     ],
-    businessImpact:
-      "Streamlined workforce management and reduced manual HR overhead.",
-    tech: [
-      "React.js",
-      "Redux Toolkit",
-      "React Query",
-      "Node.js",
-      "Express.js",
-      "Sequelize",
-      "MySQL",
-      "Firebase",
-      "REST APIs",
-      "JWT",
-    ],
+    businessImpact: "Bridged into full-time product engineering on AksharPOS.",
+    tech: ["Node.js", "Express.js", "React.js", "MySQL"],
   },
   {
     id: "di-solutions",
@@ -139,25 +124,26 @@ export const EXPERIENCES: Experience[] = [
     period: "Jul 2023 — Jun 2025",
     duration: "2 yrs",
     location: "Surat, Gujarat",
-    focus: "Manufacturing & Medical ERP, POS, E-commerce",
-    description: "Software company delivering ERP and e-commerce solutions across industries.",
+    focus: "HRMS, Manufacturing & Medical ERP, Real-Time Chat",
+    description: "Software company delivering ERP, HRMS, and e-commerce solutions across industries.",
     color: "#8b5cf6",
     summary:
-      "Delivered software across Manufacturing ERP, Medical ERP, POS, and e-commerce — building inventory, purchase, sales, shipment, and logistics modules with real-time features and multi-gateway payments.",
+      "Delivered four major production systems: an HRMS with role-aware dashboards and Firebase notifications, a Manufacturing & Logistics ERP, a Medical Record system with e-commerce features, and a real-time subscription-based chat platform.",
     responsibilities: [
-      "Developed REST APIs with Node.js and Express following MVC architecture.",
-      "Built React.js interfaces for ERP, POS, and e-commerce modules.",
-      "Modeled MySQL schemas with Sequelize for inventory, purchase, sales, and shipment.",
-      "Implemented JWT authentication and RBAC across modules.",
-      "Integrated real-time features with Socket.IO and documented APIs with Swagger.",
+      "Built an HRMS covering attendance, leave, and employee management with role-aware dashboards and Firebase Cloud Messaging notifications.",
+      "Delivered a Manufacturing & Logistics ERP covering scrap processing, shipment, cargo, sales, and inventory.",
+      "Built a Medical Record system with e-commerce features for category-wise medicine management.",
+      "Developed a real-time, subscription-based chat platform using Socket.IO.",
+      "Built REST APIs, inventory, purchase, sales, shipment, and logistics features with React, Node.js, Express, and Sequelize/MySQL, following MVC architecture.",
+      "Integrated Razorpay, Stripe, and PayPal for checkout flows; documented APIs with Swagger.",
     ],
     achievements: [
-      "Delivered 10+ ERP modules spanning manufacturing, medical, inventory, and logistics.",
+      "Delivered four major production systems spanning HRMS, manufacturing, medical/e-commerce, and real-time chat.",
       "Integrated Razorpay, Stripe, and PayPal for multi-gateway, multi-region checkout.",
-      "Built real-time order and inventory updates using Socket.IO and Firebase.",
+      "Built real-time order, inventory, and chat updates using Socket.IO and Firebase.",
     ],
     businessImpact:
-      "Enabled clients across industries to run sales, inventory, and shipment operations digitally.",
+      "Enabled clients across industries to run HR, sales, inventory, and shipment operations digitally.",
     tech: [
       "Node.js",
       "Express.js",

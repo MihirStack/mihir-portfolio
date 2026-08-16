@@ -129,12 +129,14 @@ def build(path):
     # ---- Summary ----
     s += section("Professional Summary")
     s.append(Paragraph(
-        "Full Stack Engineer with 3+ years building production ERP and multi-tenant SaaS "
-        "platforms end to end. Designs REST APIs, models relational schemas, and owns "
-        "deployments on Linux VPS with NGINX, PM2, and CI/CD. Strong across Node.js, Express, "
-        "React, TypeScript, and MySQL, with hands-on payment-gateway and real-time integrations. "
-        "Focused on secure, performant systems &mdash; JWT, RBAC, query optimization, caching, "
-        "and zero-downtime releases.",
+        "Full Stack Engineer with 3+ years building and owning production ERP and multi-tenant SaaS "
+        "platforms end to end &mdash; from API and schema design through deployment. Currently "
+        "architecting AksharPOS, a multi-tenant SaaS product, with per-tenant database isolation and "
+        "dynamic, cached connection routing. Works across Node.js, Express, React, TypeScript, and "
+        "MySQL, with hands-on payment-gateway (Razorpay, Stripe, PayPal), messaging (WhatsApp Business "
+        "API, Firebase, Socket.IO), and real-time integrations, and owns Linux/NGINX/PM2 deployments "
+        "with GitHub Actions CI/CD. Focused on secure, performant systems: JWT/RBAC, query and cache "
+        "optimization, and zero-downtime releases.",
         body_style,
     ))
 
@@ -142,20 +144,20 @@ def build(path):
     s += section("Experience")
 
     exp = [
-        ("Full Stack Engineer", "Logicode Software LLP", "Jan 2026 – Present", [
+        ("Full Stack Engineer — AksharPOS Product", "Codebrain Infotech → Logicode Software LLP", "Aug 2025 – Present", [
             "Architected a multi-tenant SaaS platform (AksharPOS) with per-tenant database isolation and dynamic, LRU-cached connection routing.",
-            "Built 50+ normalized MySQL models across 10+ ERP modules; secured the API with JWT and module-level RBAC.",
-            "Automated deployment on Linux VPS (NGINX, PM2 cluster, GitHub Actions CI/CD) and integrated Razorpay with webhook verification; added Redis caching to cut hot-path query load.",
+            "Built 50+ normalized MySQL models across 10+ ERP modules; secured the API with JWT authentication and module-level RBAC.",
+            "Designed an 18-template WhatsApp Business API library via Meta Business Manager for transactional and marketing messaging, including navigating Meta's approval workflow to get transactional templates classified as Utility rather than Marketing.",
+            "Automated deployment on a Linux VPS (NGINX, PM2 cluster mode, GitHub Actions CI/CD); integrated Razorpay with webhook signature verification.",
+            "Added Redis caching on hot-path queries to reduce database load under concurrent multi-branch traffic.",
         ]),
-        ("Full Stack Developer", "Codebrain Infotech", "Jul 2025 – Jan 2026", [
-            "Built an HRMS covering attendance, leave, and employee management with role-aware React dashboards (Redux Toolkit, React Query).",
-            "Developed REST APIs on Node.js, Sequelize, and MySQL with authentication and authorization.",
-            "Integrated Firebase Cloud Messaging for a real-time employee notification system.",
+        ("Full Stack Developer — Service-Based", "Codebrain Infotech", "Jul 2025 (1 month)", [
+            "One month of service-based client development work before transitioning to full-time product engineering on AksharPOS.",
         ]),
         ("Full Stack Developer", "DI Solutions", "Jul 2023 – Jun 2025", [
-            "Delivered 10+ modules across Manufacturing ERP, Medical ERP, POS, and e-commerce following MVC architecture.",
-            "Built inventory, purchase, sales, shipment, and logistics features with React, Node.js, Express, and Sequelize/MySQL.",
-            "Integrated Razorpay, Stripe, and PayPal; added real-time updates with Socket.IO and Swagger-documented APIs.",
+            "Delivered four major production systems: an HRMS covering attendance, leave, and employee management with role-aware dashboards and Firebase Cloud Messaging notifications; a Manufacturing & Logistics ERP (scrap processing, shipment, cargo, sales, and inventory); a Medical Record system with e-commerce features for category-wise medicine management; and a real-time, subscription-based chat platform.",
+            "Built REST APIs, inventory, purchase, sales, shipment, and logistics features with React, Node.js, Express, and Sequelize/MySQL, following MVC architecture.",
+            "Integrated Razorpay, Stripe, and PayPal for checkout flows; added real-time updates with Socket.IO and Swagger-documented APIs.",
         ]),
     ]
     for role, company, period, pts in exp:
@@ -167,15 +169,19 @@ def build(path):
     # ---- Projects ----
     s += section("Projects")
     projects = [
-        ("AksharPOS ERP (Logicode)",
-         "Multi-tenant ERP/POS SaaS &mdash; shared API with per-tenant MySQL DBs, 50+ models, "
-         "10+ modules, sub-30-second tenant onboarding, live in production."),
-        ("HRMS Platform (Codebrain)",
-         "Attendance, leave, and employee management with role-aware dashboards and Firebase "
+        ("AksharPOS ERP (Codebrain Infotech → Logicode Software LLP)",
+         "Multi-tenant ERP/POS SaaS &mdash; shared API layer with per-tenant MySQL databases, 50+ models, "
+         "10+ modules, sub-30-second tenant onboarding, an 18-template WhatsApp Business API integration "
+         "via Meta, live in production."),
+        ("HRMS Platform (DI Solutions)",
+         "Attendance, leave, and employee management system with role-aware dashboards and Firebase-powered "
          "real-time notifications."),
-        ("Multi-Domain ERP &amp; Commerce (DI Solutions)",
-         "Manufacturing/Medical ERP, POS, and e-commerce on shared inventory with Socket.IO "
-         "real-time flows and Razorpay/Stripe/PayPal checkout."),
+        ("Manufacturing &amp; Logistics ERP (DI Solutions)",
+         "Full system for scrap processing, shipment, cargo, sales, and inventory management."),
+        ("Medical Record &amp; E-Commerce System (DI Solutions)",
+         "Category-wise medicine management with cart, checkout, and role-based access."),
+        ("Real-Time Chat Platform (DI Solutions)",
+         "Subscription-based chat system built on Socket.IO for real-time messaging."),
     ]
     for name, desc in projects:
         s.append(Paragraph(f"<b>{name}.</b> {desc}", bullet_style))
@@ -188,6 +194,7 @@ def build(path):
         ("Backend", "Node.js, Express.js, REST APIs, Socket.IO, MVC Architecture"),
         ("Database", "MySQL, MongoDB, Redis, Sequelize ORM, Firebase"),
         ("Auth & Payments", "JWT, OAuth, RBAC  ·  Razorpay, Stripe, PayPal"),
+        ("Messaging", "WhatsApp Business API (Meta Business Manager, template management & approval), Firebase Cloud Messaging, Socket.IO"),
         ("DevOps & Tools", "Linux, NGINX, PM2, GitHub Actions, CI/CD  ·  Git, GitHub, Postman, Swagger"),
     ]
     data = [[Paragraph(k, skill_label), Paragraph(v, skill_val)] for k, v in skill_rows]
