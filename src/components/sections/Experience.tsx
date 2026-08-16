@@ -6,12 +6,14 @@ import { useInView } from "react-intersection-observer";
 import {
   Briefcase,
   MapPin,
-  ChevronRight,
   Sparkles,
   Trophy,
   TrendingUp,
+  ArrowUpRight,
 } from "lucide-react";
 import { EXPERIENCES } from "@/data/portfolio";
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 export default function Experience() {
   const [active, setActive] = useState(EXPERIENCES[0].id);
@@ -20,85 +22,79 @@ export default function Experience() {
   const activeExp = EXPERIENCES.find((e) => e.id === active)!;
 
   return (
-    <section id="experience" className="relative py-24 overflow-hidden" ref={ref}>
+    <section id="experience" className="relative py-28 overflow-hidden" ref={ref}>
       <div className="absolute inset-0 bg-surface/20" />
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(99,102,241,0.25), transparent)",
-        }}
-      />
+      <div className="section-hairline" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
+          transition={{ duration: 0.7, ease: EASE_OUT }}
+          className="mb-14 max-w-3xl"
         >
-          <div className="section-label mb-3">Career Journey</div>
-          <h2 className="text-display font-black text-white mb-3">
+          <div className="section-label mb-4">Career Journey</div>
+          <h2 className="text-display text-white mb-4 text-balance">
             Professional{" "}
-            <span className="gradient-text">Experience</span>
+            <span className="gradient-text">experience</span>
           </h2>
-          <p className="text-white/50 max-w-xl">
+          <p className="text-white/50 text-lg leading-relaxed">
             Three years of shipping production software across ERP, SaaS, HRMS,
             ecommerce, and POS — from API design to deployment.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-[340px_1fr] gap-8">
+        <div className="grid lg:grid-cols-[320px_1fr] gap-8">
           {/* Timeline rail */}
           <div className="relative">
-            {/* Vertical line */}
             <div
-              className="absolute left-[19px] top-2 bottom-2 w-px hidden lg:block"
+              aria-hidden="true"
+              className="absolute left-[7px] top-4 bottom-4 w-px hidden lg:block"
               style={{
                 background:
-                  "linear-gradient(180deg, #6366f1, #06b6d4, #8b5cf6, transparent)",
+                  "linear-gradient(180deg, rgba(251,113,133,0.6), rgba(99,102,241,0.5), rgba(139,92,246,0.3), transparent)",
               }}
             />
 
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {EXPERIENCES.map((exp, i) => {
                 const isActive = exp.id === active;
                 return (
                   <motion.button
                     key={exp.id}
                     onClick={() => setActive(exp.id)}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -18 }}
                     animate={inView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.2 + i * 0.12 }}
-                    className="relative w-full text-left lg:pl-14 group cursor-pointer"
-                    whileHover={{ x: 2 }}
+                    transition={{ delay: 0.15 + i * 0.1, duration: 0.55, ease: EASE_OUT }}
+                    className="relative w-full text-left lg:pl-9 group cursor-pointer"
                   >
-                    {/* Node */}
-                    <div
-                      className="absolute left-[11px] top-5 w-4 h-4 rounded-full border-2 border-background hidden lg:flex items-center justify-center z-10 transition-all"
+                    {/* Rail node */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-0 top-6 w-[15px] h-[15px] rounded-full hidden lg:flex items-center justify-center z-10 transition-all duration-300"
                       style={{
-                        background: isActive ? exp.color : "#1e1e38",
-                        boxShadow: isActive ? `0 0 14px ${exp.color}` : "none",
+                        background: isActive ? exp.color : "#14142a",
+                        border: `2px solid ${isActive ? exp.color : "rgba(255,255,255,0.14)"}`,
+                        boxShadow: isActive ? `0 0 16px ${exp.color}` : "none",
                       }}
                     >
                       {exp.current && (
                         <span
                           className="absolute inline-flex w-full h-full rounded-full animate-ping"
-                          style={{ background: `${exp.color}80` }}
+                          style={{ background: `${exp.color}70` }}
                         />
                       )}
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
-                    </div>
+                    </span>
 
                     <div
-                      className="p-4 rounded-xl transition-all"
+                      className="relative overflow-hidden rounded-2xl p-4 transition-all duration-300"
                       style={
                         isActive
                           ? {
                               background: `${exp.color}12`,
-                              border: `1px solid ${exp.color}40`,
-                              boxShadow: `0 0 22px ${exp.color}15`,
+                              border: `1px solid ${exp.color}45`,
+                              boxShadow: `0 8px 30px ${exp.color}18`,
                             }
                           : {
                               background: "rgba(255,255,255,0.025)",
@@ -106,15 +102,24 @@ export default function Experience() {
                             }
                       }
                     >
-                      <div className="flex items-center gap-3">
+                      {isActive && (
+                        <motion.span
+                          layoutId="exp-accent"
+                          className="absolute left-0 inset-y-0 w-[3px]"
+                          style={{ background: exp.color }}
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                        />
+                      )}
+
+                      <div className="flex items-start gap-3">
                         <div
-                          className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-sm flex-shrink-0"
+                          className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0 transition-all"
                           style={{
                             background: isActive
-                              ? `linear-gradient(135deg, ${exp.color}, ${exp.color}99)`
+                              ? `linear-gradient(140deg, ${exp.color}, ${exp.color}88)`
                               : "rgba(255,255,255,0.05)",
-                            color: isActive ? "#fff" : "rgba(255,255,255,0.5)",
-                            boxShadow: isActive ? `0 4px 14px ${exp.color}55` : "none",
+                            color: isActive ? "#fff" : "rgba(255,255,255,0.45)",
+                            boxShadow: isActive ? `0 6px 18px ${exp.color}55` : "none",
                           }}
                         >
                           {exp.monogram}
@@ -122,32 +127,34 @@ export default function Experience() {
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <span
-                              className="text-sm font-bold truncate"
+                              className="text-[13px] font-bold truncate transition-colors"
                               style={{
-                                color: isActive ? "#fff" : "rgba(255,255,255,0.7)",
+                                color: isActive ? "#fff" : "rgba(255,255,255,0.65)",
                               }}
                             >
                               {exp.company}
                             </span>
                             {exp.current && (
-                              <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex-shrink-0">
+                              <span className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-300 border border-emerald-400/25 flex-shrink-0">
                                 NOW
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-white/45 truncate">
+                          <div className="text-xs text-white/45 truncate mt-0.5">
                             {exp.role}
                           </div>
-                          <div className="text-[10px] text-white/30 mt-0.5 font-mono">
+                          <div className="text-[10px] font-mono text-white/30 mt-1.5">
                             {exp.period}
                           </div>
                         </div>
-                        <ChevronRight
+                        <ArrowUpRight
                           size={14}
-                          className="flex-shrink-0 transition-transform"
+                          className="flex-shrink-0 mt-1 transition-all duration-300"
                           style={{
-                            color: isActive ? exp.color : "rgba(255,255,255,0.2)",
-                            transform: isActive ? "rotate(90deg)" : "none",
+                            color: isActive ? exp.color : "rgba(255,255,255,0.18)",
+                            transform: isActive
+                              ? "translate(2px,-2px)"
+                              : "none",
                           }}
                         />
                       </div>
@@ -162,51 +169,55 @@ export default function Experience() {
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35 }}
-              className="rounded-2xl overflow-hidden"
+              exit={{ opacity: 0, y: -14 }}
+              transition={{ duration: 0.4, ease: EASE_OUT }}
+              className="relative rounded-3xl overflow-hidden"
               style={{
-                background: `linear-gradient(135deg, ${activeExp.color}0d 0%, rgba(0,0,0,0.25) 60%)`,
-                border: `1px solid ${activeExp.color}25`,
-                boxShadow: `0 8px 40px rgba(0,0,0,0.35)`,
+                background: `linear-gradient(150deg, ${activeExp.color}10 0%, rgba(0,0,0,0.3) 55%)`,
+                border: `1px solid ${activeExp.color}28`,
+                boxShadow: "0 16px 60px rgba(0,0,0,0.4)",
               }}
             >
-              {/* Accent bar */}
-              <div
-                className="h-1 w-full"
+              <span
+                aria-hidden="true"
+                className="absolute -top-24 -right-16 w-72 h-72 rounded-full pointer-events-none"
                 style={{
-                  background: `linear-gradient(90deg, ${activeExp.color}, transparent)`,
+                  background: `radial-gradient(circle, ${activeExp.color}22 0%, transparent 70%)`,
+                  filter: "blur(40px)",
                 }}
               />
 
-              <div className="p-6 md:p-8">
-                {/* Top row */}
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+              <div className="relative p-6 md:p-9">
+                {/* Header row */}
+                <div className="flex flex-wrap items-start justify-between gap-5 mb-7">
                   <div className="flex items-center gap-4">
                     <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-2xl"
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-2xl text-white"
                       style={{
-                        background: `linear-gradient(135deg, ${activeExp.color}, ${activeExp.color}99)`,
-                        boxShadow: `0 6px 22px ${activeExp.color}55`,
+                        background: `linear-gradient(140deg, ${activeExp.color}, ${activeExp.color}88)`,
+                        boxShadow: `0 10px 30px ${activeExp.color}50`,
                       }}
                     >
                       {activeExp.monogram}
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-white leading-tight">
+                      <h3 className="text-xl md:text-2xl font-black text-white leading-tight tracking-tight">
                         {activeExp.role}
                       </h3>
-                      <div className="text-sm" style={{ color: activeExp.color }}>
+                      <div
+                        className="text-sm mt-0.5"
+                        style={{ color: activeExp.color }}
+                      >
                         {activeExp.company}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-start sm:items-end gap-1.5">
+                  <div className="flex flex-col items-start sm:items-end gap-2">
                     <span
-                      className="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg"
+                      className="text-xs font-mono font-semibold px-3 py-1.5 rounded-full"
                       style={{
                         background: `${activeExp.color}15`,
                         border: `1px solid ${activeExp.color}30`,
@@ -226,62 +237,64 @@ export default function Experience() {
                   </div>
                 </div>
 
-                {/* Focus + summary */}
                 <div
-                  className="inline-flex items-center gap-1.5 mb-3 px-2.5 py-1 rounded-full text-[11px] font-medium"
+                  className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full text-[11px] font-medium"
                   style={{
-                    background: `${activeExp.color}10`,
-                    border: `1px solid ${activeExp.color}25`,
-                    color: `${activeExp.color}`,
+                    background: `${activeExp.color}12`,
+                    border: `1px solid ${activeExp.color}28`,
+                    color: activeExp.color,
                   }}
                 >
                   <Sparkles size={11} />
                   {activeExp.focus}
                 </div>
-                <p className="text-sm text-white/55 leading-relaxed mb-7 max-w-2xl">
+
+                <p className="text-[15px] text-white/60 leading-relaxed mb-8 max-w-2xl">
                   {activeExp.summary}
                 </p>
 
-                <div className="grid md:grid-cols-2 gap-7">
-                  {/* Responsibilities */}
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Responsibilities — numbered list reads better than chips */}
                   <div>
-                    <div className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
+                    <div className="text-[10px] font-semibold text-white/35 uppercase tracking-[0.2em] mb-4">
                       Responsibilities
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
+                    <ol className="space-y-2.5">
                       {activeExp.responsibilities.map((r, i) => (
-                        <motion.span
+                        <motion.li
                           key={r}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.03 }}
-                          className="text-[11px] px-2.5 py-1 rounded-lg"
-                          style={{
-                            background: "rgba(255,255,255,0.04)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            color: "rgba(255,255,255,0.7)",
-                          }}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.05, duration: 0.4 }}
+                          className="flex items-start gap-3 text-[13px] text-white/55 leading-relaxed"
                         >
+                          <span className="font-mono text-[10px] text-white/25 mt-0.5 tabular-nums">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
                           {r}
-                        </motion.span>
+                        </motion.li>
                       ))}
-                    </div>
+                    </ol>
                   </div>
 
                   {/* Achievements */}
                   <div>
-                    <div className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                    <div className="text-[10px] font-semibold text-white/35 uppercase tracking-[0.2em] mb-4 flex items-center gap-1.5">
                       <Trophy size={12} style={{ color: activeExp.color }} />
                       Key Achievements
                     </div>
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-3">
                       {activeExp.achievements.map((a, i) => (
                         <motion.li
                           key={a}
-                          initial={{ opacity: 0, x: -10 }}
+                          initial={{ opacity: 0, x: -8 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.1 + i * 0.08 }}
-                          className="flex items-start gap-2.5 text-sm text-white/60 leading-relaxed"
+                          transition={{ delay: 0.1 + i * 0.08, duration: 0.4 }}
+                          className="flex items-start gap-3 text-[13px] text-white/65 leading-relaxed rounded-xl px-3.5 py-3"
+                          style={{
+                            background: "rgba(255,255,255,0.03)",
+                            border: "1px solid rgba(255,255,255,0.06)",
+                          }}
                         >
                           <span
                             className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
@@ -296,30 +309,30 @@ export default function Experience() {
 
                 {/* Business impact */}
                 <div
-                  className="mt-7 flex items-start gap-3 p-4 rounded-xl"
+                  className="mt-8 flex items-start gap-3.5 p-5 rounded-2xl"
                   style={{
-                    background: `${activeExp.color}0d`,
-                    border: `1px solid ${activeExp.color}22`,
+                    background:
+                      "linear-gradient(135deg, rgba(251,191,36,0.06), rgba(251,113,133,0.05), rgba(192,38,211,0.05))",
+                    border: "1px solid rgba(251,113,133,0.2)",
                   }}
                 >
                   <TrendingUp
-                    size={16}
-                    className="flex-shrink-0 mt-0.5"
-                    style={{ color: activeExp.color }}
+                    size={17}
+                    className="flex-shrink-0 mt-0.5 text-[#fda4af]"
                   />
                   <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-widest text-white/40 mb-0.5">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40 mb-1">
                       Business Impact
                     </div>
-                    <p className="text-sm text-white/65 leading-relaxed">
+                    <p className="text-[15px] text-white/75 leading-relaxed">
                       {activeExp.businessImpact}
                     </p>
                   </div>
                 </div>
 
                 {/* Tech */}
-                <div className="mt-7 pt-6 border-t border-white/5">
-                  <div className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">
+                <div className="mt-8 pt-6 border-t border-white/[0.06]">
+                  <div className="text-[10px] font-semibold text-white/35 uppercase tracking-[0.2em] mb-3.5">
                     Technologies
                   </div>
                   <div className="flex flex-wrap gap-1.5">
