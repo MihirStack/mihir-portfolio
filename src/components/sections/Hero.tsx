@@ -1,7 +1,12 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import {
   ArrowRight,
   Download,
@@ -13,6 +18,7 @@ import {
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import { TechIcon } from "@/lib/tech-icons";
+import { useMagnetic, CardSpotlight } from "@/components/ui/useMagnetic";
 
 const STATS = [
   { value: 3, suffix: "+", label: "Years Experience" },
@@ -44,6 +50,10 @@ export default function Hero() {
   const visualY = useTransform(scrollY, [0, 600], [0, -60]);
 
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+
+  // The router panel already has its own entry animation, so it takes the
+  // spotlight without the tilt.
+  const panel = useMagnetic({ spotlightOnly: true });
 
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -220,20 +230,23 @@ export default function Hero() {
             />
 
             <motion.div
+              {...panel.bind}
               initial={{ opacity: 0, y: 40, rotateX: 8 }}
               animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
               transition={{ duration: 1, delay: 0.35, ease: EASE_OUT }}
-              className="relative w-full max-w-[380px] rounded-3xl glass overflow-hidden"
+              className="magnetic relative w-full max-w-[380px] rounded-3xl glass overflow-hidden"
               style={{
                 border: "1px solid rgba(255,255,255,0.09)",
                 boxShadow:
                   "0 24px 80px rgba(0,0,0,0.55), 0 0 90px rgba(99,102,241,0.10)",
               }}
             >
+              <CardSpotlight size={360} color="rgba(251, 113, 133, 0.13)" />
+
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.07]">
+              <div className="relative flex items-center justify-between px-5 py-3.5 border-b border-white/[0.07]">
                 <span className="font-mono text-[11px] text-white/45">
-                  tenant-router.ts
+                  <DecodeText text="tenant-router.ts" start={inView} />
                 </span>
                 <span className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.16em] text-emerald-300">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -241,7 +254,7 @@ export default function Hero() {
                 </span>
               </div>
 
-              <div className="px-5 py-6">
+              <div className="relative px-5 py-6">
                 {/* Node 1 — request */}
                 <Node
                   inView={inView}
@@ -484,5 +497,66 @@ function Beam({ inView, delay }: { inView: boolean; delay: number }) {
         }}
       />
     </div>
+  );
+}
+
+const SCRAMBLE_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789-_./";
+
+/**
+ * Resolves `text` character-by-character out of a scramble of random glyphs —
+ * a small "decode" beat for the router panel's filename when it scrolls into
+ * view. Runs once, on a single interval, and is skipped entirely under
+ * `prefers-reduced-motion` (the final text renders immediately instead).
+ */
+function DecodeText({ text, start }: { text: string; start: boolean }) {
+  const reduceMotion = useReducedMotion();
+  const [display, setDisplay] = useState(reduceMotion ? text : "");
+
+  useEffect(() => {
+    if (!start) return;
+    if (reduceMotion) {
+      setDisplay(text);
+      return;
+    }
+
+    let frame = 0;
+    const framesPerChar = 3;
+    const id = window.setInterval(() => {
+      frame += 1;
+      const resolved = Math.floor(frame / framesPerChar);
+
+      if (resolved >= text.length) {
+        setDisplay(text);
+        window.clearInterval(id);
+        return;
+      }
+
+      const scrambled = text
+        .slice(resolved)
+        .split("")
+        .map((c) =>
+          c === " "
+            ? " "
+            : SCRAMBLE_CHARS[
+                Math.floor(Math.random() * SCRAMBLE_CHARS.length)
+              ]
+        )
+        .join("");
+
+      setDisplay(text.slice(0, resolved) + scrambled);
+    }, 34);
+
+    return () => window.clearInterval(id);
+  }, [start, text, reduceMotion]);
+
+  // Reserve the final width so the header never reflows mid-decode.
+  return (
+    <span className="relative inline-block">
+      <span aria-hidden="true" className="invisible">
+        {text}
+      </span>
+      <span className="absolute inset-0">{display}</span>
+      <span className="sr-only">{text}</span>
+    </span>
   );
 }

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { TechIcon } from "@/lib/tech-icons";
+import { useMagnetic, CardSpotlight } from "@/components/ui/useMagnetic";
 import {
   Package,
   ShoppingCart,
@@ -108,6 +109,9 @@ const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 export default function Projects() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
 
+  // The flagship card is large enough that tilting it would read as wobble --
+  // it gets the cursor spotlight only.
+  const flagship = useMagnetic({ spotlightOnly: true });
 
   return (
     <section id="projects" className="relative py-28 overflow-hidden" ref={ref}>
@@ -145,10 +149,11 @@ export default function Projects() {
 
         {/* Flagship card */}
         <motion.div
+          {...flagship.bind}
           initial={{ opacity: 0, y: 44 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
-          className="relative rounded-3xl overflow-hidden mb-4"
+          className="magnetic relative rounded-3xl overflow-hidden mb-4"
           style={{
             background:
               "linear-gradient(150deg, rgba(99,102,241,0.09) 0%, rgba(139,92,246,0.06) 45%, rgba(251,113,133,0.05) 100%)",
@@ -156,13 +161,14 @@ export default function Projects() {
             boxShadow: "0 20px 70px rgba(0,0,0,0.45)",
           }}
         >
+          <CardSpotlight size={520} color="rgba(251, 113, 133, 0.10)" />
           <div
             aria-hidden="true"
-            className="h-1 w-full"
+            className="relative h-1 w-full"
             style={{ background: "var(--sig-gradient)" }}
           />
 
-          <div className="p-7 md:p-10">
+          <div className="relative p-7 md:p-10">
             {/* Asymmetric split: 5/7 rather than an even 50/50 */}
             <div className="grid lg:grid-cols-12 gap-10">
               <div className="lg:col-span-5">
@@ -350,113 +356,139 @@ export default function Projects() {
           </h3>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MORE_PROJECTS.map(
-              (
-                { icon: Icon, company, title, color, challenge, solution, impact, tech },
-                i
-              ) => (
-                <motion.article
-                  key={title}
-                  initial={{ opacity: 0, y: 28 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.5 + i * 0.1, duration: 0.6, ease: EASE_OUT }}
-                  whileHover={{ y: -6 }}
-                  className={`group relative flex flex-col rounded-2xl p-6 overflow-hidden ${
-                    i === 0 ? "md:col-span-2 lg:col-span-1" : ""
-                  }`}
-                  style={{
-                    background: "rgba(255,255,255,0.025)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                  }}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-x-0 top-0 h-px opacity-60 group-hover:opacity-100 transition-opacity"
-                    style={{
-                      background: `linear-gradient(90deg, ${color}, transparent)`,
-                    }}
-                  />
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -right-24 -top-24 w-64 h-64 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      background: `radial-gradient(circle, ${color}22 0%, transparent 70%)`,
-                      filter: "blur(30px)",
-                    }}
-                  />
-
-                  <div className="relative flex items-center justify-between mb-5">
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{
-                        background: `${color}16`,
-                        border: `1px solid ${color}30`,
-                        boxShadow: `0 0 20px ${color}15`,
-                      }}
-                    >
-                      <Icon size={18} style={{ color }} />
-                    </div>
-                    <div className="flex items-center gap-2 text-white/20">
-                      <Github size={14} />
-                      <ExternalLink size={14} />
-                    </div>
-                  </div>
-
-                  <div className="relative text-[10px] uppercase tracking-[0.2em] text-white/30 mb-1.5">
-                    {company}
-                  </div>
-                  <h4 className="relative text-lg font-bold text-white mb-5 tracking-tight">
-                    {title}
-                  </h4>
-
-                  <div className="relative space-y-3.5 flex-1">
-                    {[
-                      { k: "Challenge", v: challenge },
-                      { k: "Solution", v: solution },
-                      { k: "Impact", v: impact },
-                    ].map(({ k, v }) => (
-                      <div key={k} className="flex gap-3">
-                        <span
-                          className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
-                          style={{ background: color }}
-                        />
-                        <div>
-                          <div
-                            className="text-[10px] font-semibold uppercase tracking-[0.16em] mb-1"
-                            style={{ color: `${color}dd` }}
-                          >
-                            {k}
-                          </div>
-                          <p className="text-[13px] text-white/50 leading-relaxed">
-                            {v}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="relative flex flex-wrap gap-1.5 mt-6 pt-5 border-t border-white/[0.06]">
-                    {tech.map((t) => (
-                      <span
-                        key={t}
-                        className="inline-flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-md"
-                        style={{
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "rgba(255,255,255,0.6)",
-                        }}
-                      >
-                        <TechIcon name={t} size={10} />
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </motion.article>
-              )
-            )}
+            {MORE_PROJECTS.map((project, i) => (
+              <ProjectCard
+                key={project.title}
+                project={project}
+                index={i}
+                inView={inView}
+              />
+            ))}
           </div>
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/**
+ * A single "selected work" card. Extracted into its own component so each
+ * instance can own its magnetic-tilt + spotlight state -- hooks can't be
+ * called inside a `.map`.
+ */
+function ProjectCard({
+  project,
+  index: i,
+  inView,
+}: {
+  project: (typeof MORE_PROJECTS)[number];
+  index: number;
+  inView: boolean;
+}) {
+  const {
+    icon: Icon, company, title, color, challenge, solution, impact, tech,
+  } = project;
+  const { bind, motionStyle } = useMagnetic({ tilt: 5 });
+
+  return (
+    <motion.article
+      {...bind}
+      initial={{ opacity: 0, y: 28 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ delay: 0.5 + i * 0.1, duration: 0.6, ease: EASE_OUT }}
+      whileHover={{ y: -6 }}
+      className={`magnetic group relative flex flex-col rounded-2xl p-6 overflow-hidden ${
+        i === 0 ? "md:col-span-2 lg:col-span-1" : ""
+      }`}
+      style={{
+        ...motionStyle,
+        background: "rgba(255,255,255,0.025)",
+        border: "1px solid rgba(255,255,255,0.07)",
+      }}
+    >
+      <CardSpotlight size={300} color={`${color}20`} />
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px opacity-60 group-hover:opacity-100 transition-opacity"
+        style={{
+          background: `linear-gradient(90deg, ${color}, transparent)`,
+        }}
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 -top-24 w-64 h-64 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(circle, ${color}22 0%, transparent 70%)`,
+          filter: "blur(30px)",
+        }}
+      />
+
+      <div className="relative flex items-center justify-between mb-5">
+        <div
+          className="w-11 h-11 rounded-2xl flex items-center justify-center"
+          style={{
+            background: `${color}16`,
+            border: `1px solid ${color}30`,
+            boxShadow: `0 0 20px ${color}15`,
+          }}
+        >
+          <Icon size={18} style={{ color }} />
+        </div>
+        <div className="flex items-center gap-2 text-white/20">
+          <Github size={14} />
+          <ExternalLink size={14} />
+        </div>
+      </div>
+
+      <div className="relative text-[10px] uppercase tracking-[0.2em] text-white/30 mb-1.5">
+        {company}
+      </div>
+      <h4 className="relative text-lg font-bold text-white mb-5 tracking-tight">
+        {title}
+      </h4>
+
+      <div className="relative space-y-3.5 flex-1">
+        {[
+          { k: "Challenge", v: challenge },
+          { k: "Solution", v: solution },
+          { k: "Impact", v: impact },
+        ].map(({ k, v }) => (
+          <div key={k} className="flex gap-3">
+            <span
+              className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
+              style={{ background: color }}
+            />
+            <div>
+              <div
+                className="text-[10px] font-semibold uppercase tracking-[0.16em] mb-1"
+                style={{ color: `${color}dd` }}
+              >
+                {k}
+              </div>
+              <p className="text-[13px] text-white/50 leading-relaxed">
+                {v}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="relative flex flex-wrap gap-1.5 mt-6 pt-5 border-t border-white/[0.06]">
+        {tech.map((t) => (
+          <span
+            key={t}
+            className="inline-flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-md"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: "rgba(255,255,255,0.6)",
+            }}
+          >
+            <TechIcon name={t} size={10} />
+            {t}
+          </span>
+        ))}
+      </div>
+    </motion.article>
   );
 }

@@ -432,3 +432,47 @@ body {
     transform: translateX(200%) skewX(-15deg);
   }
 }
+
+/* ---------------------------------------------------------------
+   Signature interactions
+   --------------------------------------------------------------- */
+
+/* Cursor-tracking spotlight overlay (see components/ui/useMagnetic.tsx). */
+.card-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--spot-opacity, 0);
+  transition: opacity 0.35s ease;
+}
+
+/* Cards driven by useMagnetic hint the compositor about the tilt transform. */
+.magnetic {
+  will-change: transform;
+}
+
+/* Staggered mask wipe used for key section headlines. */
+.mask-line {
+  display: block;
+  overflow: hidden;
+}
+
+@media (hover: none), (pointer: coarse) {
+  /* Hover-only flourishes are dead weight on touch — switch them off. */
+  .card-spotlight {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Extends the global guard to the signature interaction layer. */
+  .magnetic {
+    transform: none !important;
+    will-change: auto;
+  }
+  .card-spotlight {
+    display: none;
+  }
+}
