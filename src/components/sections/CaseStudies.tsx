@@ -305,7 +305,7 @@ export default function CaseStudies() {
             className="grid lg:grid-cols-12 gap-5"
           >
             {/* Narrative */}
-            <div className="lg:col-span-7 space-y-3">
+            <div className="min-w-0 lg:col-span-7 space-y-3">
               <div
                 className="relative overflow-hidden rounded-2xl p-6"
                 style={{
@@ -376,7 +376,7 @@ export default function CaseStudies() {
             </div>
 
             {/* Code */}
-            <div className="lg:col-span-5">
+            <div className="min-w-0 lg:col-span-5">
               <div
                 className="rounded-2xl overflow-hidden lg:sticky lg:top-24"
                 style={{
