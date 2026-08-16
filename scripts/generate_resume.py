@@ -15,69 +15,71 @@ from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.lib.enums import TA_LEFT
 
-# Palette
-INK = HexColor("#0f172a")
-SLATE = HexColor("#475569")
-INDIGO = HexColor("#4f46e5")
-VIOLET = HexColor("#7c3aed")
-LIGHT = HexColor("#64748b")
-RULE = HexColor("#c7d2fe")
+# Palette — warm editorial paper, no blue/indigo/gradient.
+INK = HexColor("#1a1a1a")
+MUTED = HexColor("#4a4a4a")
+ACCENT = HexColor("#b5591a")
+LINE = HexColor("#d8d3c8")
+BODY_INK = HexColor("#2a2a2a")
 
 styles = getSampleStyleSheet()
 
+# Serif (Times) for name/roles/body — stands in for the Georgia used on the
+# site. Sans (Helvetica) for labels/headlines/meta — stands in for Helvetica
+# Neue, matching the site's own font pairing.
 name_style = ParagraphStyle(
-    "Name", parent=styles["Title"], fontName="Helvetica-Bold",
-    fontSize=23, textColor=INK, leading=26, spaceAfter=2, alignment=TA_CENTER,
+    "Name", parent=styles["Title"], fontName="Times-Bold",
+    fontSize=25, textColor=INK, leading=27, spaceAfter=3, alignment=TA_LEFT,
 )
 title_style = ParagraphStyle(
     "JobTitle", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=11, textColor=INDIGO, leading=14, alignment=TA_CENTER, spaceAfter=4,
+    fontSize=10.5, textColor=ACCENT, leading=13, alignment=TA_LEFT, spaceAfter=7,
 )
 contact_style = ParagraphStyle(
     "Contact", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.5, textColor=SLATE, leading=12, alignment=TA_CENTER,
+    fontSize=8.5, textColor=MUTED, leading=12, alignment=TA_LEFT,
 )
 section_style = ParagraphStyle(
     "Section", parent=styles["Heading2"], fontName="Helvetica-Bold",
-    fontSize=10.2, textColor=INDIGO, leading=12.5, spaceBefore=5, spaceAfter=2.5,
+    fontSize=9.5, textColor=INK, leading=12, spaceBefore=6, spaceAfter=2.5,
     keepWithNext=1,
 )
 body_style = ParagraphStyle(
-    "Body", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.4, textColor=INK, leading=11.5, alignment=TA_LEFT,
+    "Body", parent=styles["Normal"], fontName="Times-Roman",
+    fontSize=9, textColor=BODY_INK, leading=12, alignment=TA_LEFT,
 )
 bullet_style = ParagraphStyle(
     "Bullet", parent=body_style, leftIndent=10, bulletIndent=0,
-    spaceAfter=0.8, fontSize=8.4, leading=11,
+    spaceAfter=1, fontSize=8.8, leading=11.3,
 )
 role_style = ParagraphStyle(
-    "Role", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=9.6, textColor=INK, leading=12,
+    "Role", parent=styles["Normal"], fontName="Times-Bold",
+    fontSize=10.2, textColor=INK, leading=12.5,
 )
 meta_style = ParagraphStyle(
-    "Meta", parent=styles["Normal"], fontName="Helvetica-Oblique",
-    fontSize=8.1, textColor=LIGHT, leading=11.5,
+    "Meta", parent=styles["Normal"], fontName="Helvetica",
+    fontSize=8, textColor=MUTED, leading=11.5,
 )
 company_style = ParagraphStyle(
     "Company", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.4, textColor=SLATE, leading=11, spaceAfter=1,
+    fontSize=8.3, textColor=MUTED, leading=11, spaceAfter=1.5,
 )
 skill_label = ParagraphStyle(
     "SkillLabel", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=8.6, textColor=VIOLET, leading=11,
+    fontSize=8.2, textColor=MUTED, leading=11,
 )
 skill_val = ParagraphStyle(
-    "SkillVal", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.6, textColor=INK, leading=11,
+    "SkillVal", parent=styles["Normal"], fontName="Times-Roman",
+    fontSize=8.8, textColor=BODY_INK, leading=11,
 )
 
 
 def section(title):
     return [
         Paragraph(title.upper(), section_style),
-        HRFlowable(width="100%", thickness=0.8, color=RULE,
+        HRFlowable(width="100%", thickness=0.6, color=LINE,
                    spaceBefore=0, spaceAfter=4),
     ]
 
@@ -114,20 +116,24 @@ def build(path):
     s = []
 
     # ---- Header ----
-    s.append(Paragraph("MIHIR BORSANIYA", name_style))
-    s.append(Paragraph("Full Stack Engineer", title_style))
+    s.append(Paragraph("Mihir Borsaniya", name_style))
     s.append(Paragraph(
-        "Surat, Gujarat, India &nbsp;|&nbsp; developermihir13@gmail.com &nbsp;|&nbsp; "
-        "+91 75758 96243 &nbsp;|&nbsp; "
-        '<link href="https://mihirborsaniya.vercel.app"><font color="#4f46e5">mihirborsaniya.vercel.app</font></link>'
-        " &nbsp;|&nbsp; "
-        '<link href="https://github.com/MihirStack"><font color="#4f46e5">github.com/MihirStack</font></link>'
-        " &nbsp;|&nbsp; "
-        '<link href="https://linkedin.com/in/mihirborsaniya"><font color="#4f46e5">linkedin.com/in/mihirborsaniya</font></link>',
+        "FULL STACK ENGINEER &nbsp;&mdash;&nbsp; NODE.JS &middot; REACT &middot; "
+        "TYPESCRIPT &middot; MULTI-TENANT SAAS &middot; MYSQL",
+        title_style,
+    ))
+    s.append(Paragraph(
+        "Surat, Gujarat, India &nbsp;&nbsp; developermihir13@gmail.com &nbsp;&nbsp; "
+        "+91 75758 96243 &nbsp;&nbsp; "
+        '<link href="https://mihirborsaniya.vercel.app"><font color="#4a4a4a">mihirborsaniya.vercel.app</font></link>'
+        " &nbsp;&nbsp; "
+        '<link href="https://github.com/MihirStack"><font color="#4a4a4a">github.com/MihirStack</font></link>'
+        " &nbsp;&nbsp; "
+        '<link href="https://linkedin.com/in/mihirborsaniya"><font color="#4a4a4a">linkedin.com/in/mihirborsaniya</font></link>',
         contact_style,
     ))
-    s.append(Spacer(1, 5))
-    s.append(HRFlowable(width="100%", thickness=1.2, color=INDIGO, spaceAfter=2))
+    s.append(Spacer(1, 8))
+    s.append(HRFlowable(width="100%", thickness=1.4, color=INK, spaceAfter=6))
 
     # ---- Summary ----
     s += section("Professional Summary")
@@ -147,7 +153,11 @@ def build(path):
     s += section("Experience")
 
     exp = [
-        ("Full Stack Engineer — AksharPOS Product", "Codebrain Infotech → Logicode Software LLP", "Aug 2025 – Present", [
+        ("Full Stack Engineer — AksharPOS Product",
+         "Codebrain Infotech → Logicode Software LLP "
+         "<font size=7.5>(registered Jan 2026 as the product's dedicated entity "
+         "&mdash; same team, same product throughout)</font>",
+         "Aug 2025 – Present", [
             "Architected a multi-tenant SaaS platform (AksharPOS) with per-tenant database isolation and dynamic, LRU-cached connection routing.",
             "Built 50+ normalized MySQL models across 10+ ERP modules; secured the API with JWT authentication and module-level RBAC.",
             "Designed an 18-template WhatsApp Business API library via Meta Business Manager for transactional and marketing messaging, including navigating Meta's approval workflow to get transactional templates classified as Utility rather than Marketing.",
