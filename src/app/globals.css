@@ -272,6 +272,31 @@ body {
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* Form fields — replaces the per-input inline focus handlers. */
+.field {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.85rem;
+  font-size: 0.875rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+.field::placeholder {
+  color: rgba(255, 255, 255, 0.22);
+}
+.field:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.field:focus {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(251, 113, 133, 0.55);
+  box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.12);
+}
+
 /* ---------------------------------------------------------------
    Decorative
    --------------------------------------------------------------- */
