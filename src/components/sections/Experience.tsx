@@ -134,7 +134,7 @@ export default function Experience() {
                                 color: isActive ? "#fff" : "rgba(255,255,255,0.65)",
                               }}
                             >
-                              {exp.company}
+                              {exp.companyShort}
                             </span>
                             {exp.current && (
                               <span className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-400/15 text-emerald-300 border border-emerald-400/25 flex-shrink-0">
@@ -200,15 +200,25 @@ export default function Experience() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Visit ${activeExp.company} website`}
-                      className="relative w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-white p-2 transition-transform duration-300 hover:scale-105"
-                      style={{ boxShadow: `0 10px 30px ${activeExp.color}50` }}
+                      className="relative w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 p-2.5 transition-transform duration-300 hover:scale-105"
+                      style={{
+                        background:
+                          activeExp.companyLogoBg === "dark"
+                            ? "linear-gradient(140deg, #14142a, #1e1e38)"
+                            : "#ffffff",
+                        border:
+                          activeExp.companyLogoBg === "dark"
+                            ? "1px solid rgba(255,255,255,0.1)"
+                            : "none",
+                        boxShadow: `0 10px 30px ${activeExp.color}50`,
+                      }}
                     >
                       <Image
                         src={activeExp.companyLogo}
                         alt={`${activeExp.company} logo`}
                         fill
                         sizes="56px"
-                        className="object-contain p-2"
+                        className="object-contain p-2.5"
                       />
                     </a>
                     <div>
