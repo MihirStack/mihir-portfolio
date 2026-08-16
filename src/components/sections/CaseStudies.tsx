@@ -28,7 +28,7 @@ const CASE_STUDIES = [
         icon: AlertTriangle,
         title: "The Problem",
         content:
-          "We needed a single platform that could serve dozens of retail businesses simultaneously, with each business having completely isolated data, custom configurations, and independent subscription features â€” without running a separate server per client.",
+          "We needed a single platform that could serve dozens of retail businesses simultaneously, with each business having completely isolated data, custom configurations, and independent subscription features — without running a separate server per client.",
       },
       {
         icon: Lightbulb,
@@ -46,7 +46,7 @@ const CASE_STUDIES = [
         icon: TrendingUp,
         title: "Results",
         content:
-          "Zero cross-tenant data leakage. 40ms average additional latency for tenant resolution. Onboarding a new tenant takes under 30 seconds â€” automated database creation, seed data injection, and admin user provisioning via a single API call.",
+          "Zero cross-tenant data leakage. 40ms average additional latency for tenant resolution. Onboarding a new tenant takes under 30 seconds — automated database creation, seed data injection, and admin user provisioning via a single API call.",
       },
     ],
     codeSnippet: `// Tenant resolution middleware
@@ -81,13 +81,13 @@ async function tenantResolver(req, res, next) {
         icon: AlertTriangle,
         title: "The Problem",
         content:
-          "Retail businesses needed to accept payments via multiple channels â€” UPI, cards, cash, and split payments â€” with every transaction logged, reconciled, and tied to an invoice. Payment failures needed graceful handling without data corruption.",
+          "Retail businesses needed to accept payments via multiple channels — UPI, cards, cash, and split payments — with every transaction logged, reconciled, and tied to an invoice. Payment failures needed graceful handling without data corruption.",
       },
       {
         icon: Lightbulb,
         title: "Payment Flow Design",
         content:
-          "Designed a two-phase payment flow: Order creation generates a Razorpay order ID and locks inventory. Payment completion triggers a webhook that verifies HMAC signature before updating order status â€” ensuring no order is marked paid without cryptographic verification.",
+          "Designed a two-phase payment flow: Order creation generates a Razorpay order ID and locks inventory. Payment completion triggers a webhook that verifies HMAC signature before updating order status — ensuring no order is marked paid without cryptographic verification.",
       },
       {
         icon: Code2,
@@ -112,7 +112,7 @@ function verifyPaymentSignature(payload) {
 
   if (expectedSig !== signature) {
     throw new PaymentVerificationError(
-      'Signature mismatch â€” possible tampering'
+      'Signature mismatch — possible tampering'
     );
   }
 
@@ -149,7 +149,7 @@ function verifyPaymentSignature(payload) {
         icon: Code2,
         title: "GitHub Actions Pipeline",
         content:
-          "CI pipeline runs on every PR: linting â†’ unit tests â†’ build verification â†’ staging deploy. CD pipeline triggers on `main` merge: SSH into VPS â†’ pull latest â†’ npm install â†’ run migrations â†’ PM2 reload. PM2 cluster mode ensures zero-downtime via graceful restarts.",
+          "CI pipeline runs on every PR: linting → unit tests → build verification → staging deploy. CD pipeline triggers on `main` merge: SSH into VPS → pull latest → npm install → run migrations → PM2 reload. PM2 cluster mode ensures zero-downtime via graceful restarts.",
       },
       {
         icon: TrendingUp,
@@ -197,7 +197,7 @@ export default function CaseStudies() {
       <div className="section-hairline" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header â€” title left, selector count right */}
+        {/* Header — title left, selector count right */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -294,7 +294,7 @@ export default function CaseStudies() {
           })}
         </motion.div>
 
-        {/* Content â€” narrative left, sticky code right */}
+        {/* Content — narrative left, sticky code right */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}

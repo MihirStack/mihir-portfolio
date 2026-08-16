@@ -64,7 +64,7 @@ const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 export default function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  // Honeypot â€” hidden from real users, catches bots.
+  // Honeypot — hidden from real users, catches bots.
   const [company, setCompany] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -107,7 +107,7 @@ export default function Contact() {
       <div className="absolute inset-0 bg-surface/40" />
       <div className="section-hairline" />
 
-      {/* Signature wash â€” the page closes on the accent it opened with */}
+      {/* Signature wash — the page closes on the accent it opened with */}
       <div
         aria-hidden="true"
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[760px] h-[460px] rounded-full pointer-events-none"
@@ -132,13 +132,13 @@ export default function Contact() {
           </h2>
           <p className="text-white/50 text-lg leading-relaxed">
             Whether you&apos;re looking for an engineer to join your team, build your
-            SaaS platform, or consult on system architecture â€” I&apos;d love to hear
+            SaaS platform, or consult on system architecture — I&apos;d love to hear
             about it.
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8">
-          {/* Left â€” availability, channels, resume */}
+          {/* Left — availability, channels, resume */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -184,7 +184,7 @@ export default function Contact() {
               <div className="mt-5 pt-4 border-t border-white/[0.08] flex flex-wrap gap-x-5 gap-y-2">
                 <span className="flex items-center gap-2 text-[13px] text-white/50">
                   <MapPin size={13} className="text-[#fda4af] flex-shrink-0" />
-                  Gujarat, India Â· Open to remote
+                  Gujarat, India · Open to remote
                 </span>
                 <span className="flex items-center gap-2 text-[13px] text-white/50">
                   <Clock size={13} className="text-cyan-300 flex-shrink-0" />
@@ -245,7 +245,7 @@ export default function Contact() {
             </motion.a>
           </motion.div>
 
-          {/* Right â€” form */}
+          {/* Right — form */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -261,11 +261,11 @@ export default function Contact() {
                   Send a message
                 </div>
                 <p className="text-[13px] text-white/40 mt-1">
-                  Straight to my inbox â€” no forms-to-nowhere.
+                  Straight to my inbox — no forms-to-nowhere.
                 </p>
               </div>
 
-              {/* Honeypot â€” hidden from users, ignored by them, filled by bots */}
+              {/* Honeypot — hidden from users, ignored by them, filled by bots */}
               <input
                 type="text"
                 name="company"
