@@ -118,6 +118,8 @@ def build(path):
     s.append(Paragraph(
         "Surat, Gujarat, India &nbsp;|&nbsp; developermihir13@gmail.com &nbsp;|&nbsp; "
         "+91 75758 96243 &nbsp;|&nbsp; "
+        '<link href="https://mihirborsaniya.vercel.app"><font color="#4f46e5">mihirborsaniya.vercel.app</font></link>'
+        " &nbsp;|&nbsp; "
         '<link href="https://github.com/MihirStack"><font color="#4f46e5">github.com/MihirStack</font></link>'
         " &nbsp;|&nbsp; "
         '<link href="https://linkedin.com/in/mihirborsaniya"><font color="#4f46e5">linkedin.com/in/mihirborsaniya</font></link>',

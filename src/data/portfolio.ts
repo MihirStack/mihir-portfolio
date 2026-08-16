@@ -17,6 +17,8 @@ export const PROFILE = {
   githubHandle: "MihirStack",
   linkedin: "https://linkedin.com/in/mihirborsaniya",
   linkedinHandle: "mihirborsaniya",
+  portfolio: "https://mihirborsaniya.vercel.app",
+  portfolioHandle: "mihirborsaniya.vercel.app",
   yearsExperience: "3+",
 };
 
