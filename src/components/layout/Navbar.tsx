@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, ArrowUpRight } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -18,7 +18,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const { scrollY } = useScroll();
-  const bgOpacity = useTransform(scrollY, [0, 80], [0, 1]);
+  const shellOpacity = useTransform(scrollY, [0, 90], [0, 1]);
+  const shellScale = useTransform(scrollY, [0, 90], [1.02, 1]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,71 +51,93 @@ export default function Navbar() {
     <>
       <motion.header
         className="fixed top-0 left-0 right-0 z-50"
-        initial={{ y: -20, opacity: 0 }}
+        initial={{ y: -28, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
+        {/* Backdrop shell — fades in only once the page has scrolled. */}
         <motion.div
-          className="absolute inset-0 backdrop-blur-xl border-b border-white/5"
+          className="absolute inset-0 backdrop-blur-2xl border-b border-white/[0.06]"
           style={{
-            opacity: bgOpacity,
-            background: "rgba(8,8,15,0.85)",
+            opacity: shellOpacity,
+            scaleY: shellScale,
+            background:
+              "linear-gradient(180deg, rgba(8,8,15,0.92) 0%, rgba(8,8,15,0.72) 100%)",
           }}
         />
+
         <nav className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+          <div className="flex items-center justify-between h-[68px] gap-4">
+            {/* Wordmark */}
             <motion.button
               onClick={() => scrollTo("#hero")}
-              className="flex items-center gap-2 group cursor-pointer"
-              whileHover={{ scale: 1.02 }}
+              className="flex items-center gap-2.5 group cursor-pointer shrink-0"
+              whileHover={{ x: 1 }}
               whileTap={{ scale: 0.98 }}
+              aria-label="Back to top"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-glow-primary">
-                MB
-              </div>
-              <span className="text-sm font-semibold text-white/90 hidden sm:block">
-                Mihir Borsaniya
+              <span className="relative flex items-center justify-center w-9 h-9">
+                <span
+                  className="absolute inset-0 rounded-xl opacity-70 blur-[10px] transition-opacity duration-500 group-hover:opacity-100"
+                  style={{ background: "var(--sig-gradient)" }}
+                />
+                <span
+                  className="relative w-9 h-9 rounded-xl flex items-center justify-center text-[13px] font-black tracking-tight"
+                  style={{
+                    background: "linear-gradient(140deg, #12121f, #1b1b30)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "#fff",
+                  }}
+                >
+                  MB
+                </span>
+              </span>
+              <span className="hidden sm:flex flex-col leading-none text-left">
+                <span className="text-[13px] font-semibold text-white/90">
+                  Mihir Borsaniya
+                </span>
+                <span className="text-[10px] tracking-[0.18em] uppercase text-white/35 mt-1">
+                  Full Stack Engineer
+                </span>
               </span>
             </motion.button>
 
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-1">
-              {NAV_LINKS.map(({ label, href }) => (
-                <motion.button
-                  key={label}
-                  onClick={() => scrollTo(href)}
-                  className={`relative px-3 py-1.5 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
-                    activeSection === href.slice(1)
-                      ? "text-white"
-                      : "text-white/50 hover:text-white/90"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {activeSection === href.slice(1) && (
-                    <motion.div
-                      layoutId="nav-pill"
-                      className="absolute inset-0 rounded-lg"
-                      style={{
-                        background: "rgba(99,102,241,0.15)",
-                        border: "1px solid rgba(99,102,241,0.25)",
-                      }}
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                    />
-                  )}
-                  <span className="relative z-10">{label}</span>
-                </motion.button>
-              ))}
+            {/* Desktop nav — a single floating capsule instead of loose links */}
+            <div className="hidden lg:flex items-center rounded-full p-1 border border-white/[0.07] bg-white/[0.025] backdrop-blur-xl">
+              {NAV_LINKS.map(({ label, href }) => {
+                const isActive = activeSection === href.slice(1);
+                return (
+                  <button
+                    key={label}
+                    onClick={() => scrollTo(href)}
+                    className={`relative px-3 py-1.5 text-[13px] font-medium rounded-full transition-colors duration-300 cursor-pointer ${
+                      isActive ? "text-[#1a0f13]" : "text-white/50 hover:text-white/90"
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          background: "var(--sig-gradient)",
+                          boxShadow: "0 4px 18px rgba(251,113,133,0.35)",
+                        }}
+                        transition={{ type: "spring", bounce: 0.18, duration: 0.55 }}
+                      />
+                    )}
+                    <span className="relative z-10 whitespace-nowrap">{label}</span>
+                  </button>
+                );
+              })}
             </div>
 
-            {/* CTA */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* CTA cluster */}
+            <div className="hidden lg:flex items-center gap-2 shrink-0">
               <motion.a
                 href="/resume.pdf"
                 download="Mihir_Borsaniya_Resume.pdf"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white/70 hover:text-white border border-white/10 hover:border-white/20 rounded-lg transition-all"
-                whileHover={{ scale: 1.03 }}
+                className="btn-ghost flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium rounded-full"
+                whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
               >
                 <Download size={13} />
@@ -122,73 +145,111 @@ export default function Navbar() {
               </motion.a>
               <motion.button
                 onClick={() => scrollTo("#contact")}
-                className="px-4 py-1.5 text-sm font-semibold text-white rounded-lg cursor-pointer"
+                className="group flex items-center gap-1 px-4 py-2 text-[13px] rounded-full cursor-pointer text-white font-semibold"
                 style={{
                   background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  boxShadow: "0 4px 16px rgba(99,102,241,0.4)",
+                  boxShadow: "0 4px 18px rgba(99,102,241,0.35)",
                 }}
-                whileHover={{ scale: 1.04, boxShadow: "0 6px 24px rgba(99,102,241,0.5)" }}
+                whileHover={{
+                  y: -1,
+                  boxShadow: "0 8px 26px rgba(99,102,241,0.5)",
+                }}
                 whileTap={{ scale: 0.96 }}
               >
                 Hire Me
+                <ArrowUpRight
+                  size={14}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
               </motion.button>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile trigger */}
             <motion.button
-              className="md:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-white/70 hover:text-white border border-white/[0.08] bg-white/[0.03] transition-colors cursor-pointer"
               onClick={() => setIsOpen(!isOpen)}
               whileTap={{ scale: 0.9 }}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={isOpen ? "close" : "open"}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="block"
+                >
+                  {isOpen ? <X size={19} /> : <Menu size={19} />}
+                </motion.span>
+              </AnimatePresence>
             </motion.button>
           </div>
         </nav>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-16 left-0 right-0 z-40 md:hidden"
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed top-[68px] left-0 right-0 z-40 lg:hidden"
             style={{
               background: "rgba(8,8,15,0.97)",
-              backdropFilter: "blur(20px)",
+              backdropFilter: "blur(24px)",
               borderBottom: "1px solid rgba(255,255,255,0.07)",
             }}
           >
-            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
-              {NAV_LINKS.map(({ label, href }, i) => (
-                <motion.button
-                  key={label}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  onClick={() => scrollTo(href)}
-                  className="text-left px-3 py-3 text-sm font-medium text-white/70 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
-                >
-                  {label}
-                </motion.button>
-              ))}
-              <div className="flex gap-2 mt-2 pt-2 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col gap-1">
+              {NAV_LINKS.map(({ label, href }, i) => {
+                const isActive = activeSection === href.slice(1);
+                return (
+                  <motion.button
+                    key={label}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.04, duration: 0.3 }}
+                    onClick={() => scrollTo(href)}
+                    className={`flex items-center justify-between text-left px-3 py-3 text-sm font-medium rounded-xl transition-colors cursor-pointer ${
+                      isActive
+                        ? "text-white bg-white/[0.06]"
+                        : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span
+                        className="w-1 h-4 rounded-full transition-all"
+                        style={{
+                          background: isActive
+                            ? "var(--sig-gradient)"
+                            : "rgba(255,255,255,0.12)",
+                        }}
+                      />
+                      {label}
+                    </span>
+                    <span className="text-[10px] font-mono text-white/20">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </motion.button>
+                );
+              })}
+
+              <div className="flex gap-2 mt-3 pt-3 border-t border-white/[0.06]">
                 <a
                   href="/resume.pdf"
                   download="Mihir_Borsaniya_Resume.pdf"
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-medium text-white/70 border border-white/10 rounded-lg"
+                  className="btn-ghost flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium rounded-xl"
                 >
-                  <Download size={13} />
+                  <Download size={14} />
                   Resume
                 </a>
                 <button
                   onClick={() => scrollTo("#contact")}
-                  className="flex-1 px-3 py-2.5 text-sm font-semibold text-white rounded-lg cursor-pointer"
-                  style={{
-                    background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  }}
+                  className="btn-signature flex-1 px-3 py-3 text-sm rounded-xl cursor-pointer"
                 >
                   Hire Me
                 </button>

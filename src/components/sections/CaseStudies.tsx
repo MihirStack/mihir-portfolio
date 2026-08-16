@@ -7,13 +7,11 @@ import {
   Layers,
   CreditCard,
   GitBranch,
-  ChevronRight,
   CheckCircle,
   AlertTriangle,
   Lightbulb,
   TrendingUp,
   Code2,
-  Server,
   ArrowRight,
 } from "lucide-react";
 
@@ -30,7 +28,7 @@ const CASE_STUDIES = [
         icon: AlertTriangle,
         title: "The Problem",
         content:
-          "We needed a single platform that could serve dozens of retail businesses simultaneously, with each business having completely isolated data, custom configurations, and independent subscription features — without running a separate server per client.",
+          "We needed a single platform that could serve dozens of retail businesses simultaneously, with each business having completely isolated data, custom configurations, and independent subscription features â€” without running a separate server per client.",
       },
       {
         icon: Lightbulb,
@@ -48,7 +46,7 @@ const CASE_STUDIES = [
         icon: TrendingUp,
         title: "Results",
         content:
-          "Zero cross-tenant data leakage. 40ms average additional latency for tenant resolution. Onboarding a new tenant takes under 30 seconds — automated database creation, seed data injection, and admin user provisioning via a single API call.",
+          "Zero cross-tenant data leakage. 40ms average additional latency for tenant resolution. Onboarding a new tenant takes under 30 seconds â€” automated database creation, seed data injection, and admin user provisioning via a single API call.",
       },
     ],
     codeSnippet: `// Tenant resolution middleware
@@ -83,13 +81,13 @@ async function tenantResolver(req, res, next) {
         icon: AlertTriangle,
         title: "The Problem",
         content:
-          "Retail businesses needed to accept payments via multiple channels — UPI, cards, cash, and split payments — with every transaction logged, reconciled, and tied to an invoice. Payment failures needed graceful handling without data corruption.",
+          "Retail businesses needed to accept payments via multiple channels â€” UPI, cards, cash, and split payments â€” with every transaction logged, reconciled, and tied to an invoice. Payment failures needed graceful handling without data corruption.",
       },
       {
         icon: Lightbulb,
         title: "Payment Flow Design",
         content:
-          "Designed a two-phase payment flow: Order creation generates a Razorpay order ID and locks inventory. Payment completion triggers a webhook that verifies HMAC signature before updating order status — ensuring no order is marked paid without cryptographic verification.",
+          "Designed a two-phase payment flow: Order creation generates a Razorpay order ID and locks inventory. Payment completion triggers a webhook that verifies HMAC signature before updating order status â€” ensuring no order is marked paid without cryptographic verification.",
       },
       {
         icon: Code2,
@@ -114,7 +112,7 @@ function verifyPaymentSignature(payload) {
 
   if (expectedSig !== signature) {
     throw new PaymentVerificationError(
-      'Signature mismatch — possible tampering'
+      'Signature mismatch â€” possible tampering'
     );
   }
 
@@ -151,7 +149,7 @@ function verifyPaymentSignature(payload) {
         icon: Code2,
         title: "GitHub Actions Pipeline",
         content:
-          "CI pipeline runs on every PR: linting → unit tests → build verification → staging deploy. CD pipeline triggers on `main` merge: SSH into VPS → pull latest → npm install → run migrations → PM2 reload. PM2 cluster mode ensures zero-downtime via graceful restarts.",
+          "CI pipeline runs on every PR: linting â†’ unit tests â†’ build verification â†’ staging deploy. CD pipeline triggers on `main` merge: SSH into VPS â†’ pull latest â†’ npm install â†’ run migrations â†’ PM2 reload. PM2 cluster mode ensures zero-downtime via graceful restarts.",
       },
       {
         icon: TrendingUp,
@@ -184,204 +182,254 @@ jobs:
   },
 ];
 
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
 export default function CaseStudies() {
   const [active, setActive] = useState("architecture");
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
 
   const activeStudy = CASE_STUDIES.find((s) => s.id === active)!;
+  const activeIndex = CASE_STUDIES.findIndex((s) => s.id === active);
 
   return (
-    <section id="case-studies" className="relative py-24 overflow-hidden" ref={ref}>
+    <section id="case-studies" className="relative py-28 overflow-hidden" ref={ref}>
       <div className="absolute inset-0 bg-surface/30" />
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.25), transparent)",
-        }}
-      />
+      <div className="section-hairline" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header â€” title left, selector count right */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
+          transition={{ duration: 0.7, ease: EASE_OUT }}
+          className="mb-12 flex flex-wrap items-end justify-between gap-6"
         >
-          <div className="section-label mb-3">Case Studies</div>
-          <h2 className="text-display font-black text-white mb-3">
-            Engineering{" "}
-            <span className="gradient-text">Deep Dives</span>
-          </h2>
-          <p className="text-white/50 max-w-xl">
-            Real problems, real solutions. How I approached the hardest engineering
-            challenges in production.
-          </p>
+          <div className="max-w-2xl">
+            <div className="section-label mb-4">Case Studies</div>
+            <h2 className="text-display text-white mb-4 text-balance">
+              Engineering <span className="gradient-text">deep dives</span>
+            </h2>
+            <p className="text-white/50 text-lg leading-relaxed">
+              Real problems, real solutions. How I approached the hardest engineering
+              challenges in production.
+            </p>
+          </div>
+          <div className="font-mono text-sm text-white/25 tabular-nums">
+            <span className="text-white/70">
+              {String(activeIndex + 1).padStart(2, "0")}
+            </span>
+            {" / "}
+            {String(CASE_STUDIES.length).padStart(2, "0")}
+          </div>
         </motion.div>
 
-        {/* Tab selectors */}
+        {/* Selector */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2 }}
-          className="flex flex-col sm:flex-row gap-2 mb-8"
+          transition={{ delay: 0.15, duration: 0.6, ease: EASE_OUT }}
+          className="grid sm:grid-cols-3 gap-2.5 mb-6"
         >
-          {CASE_STUDIES.map(({ id, icon: Icon, label, title, color }) => (
-            <motion.button
-              key={id}
-              onClick={() => setActive(id)}
-              className="flex-1 flex items-center gap-3 p-4 rounded-xl text-left transition-all cursor-pointer"
-              style={
-                active === id
-                  ? {
-                      background: `${color}10`,
-                      border: `1px solid ${color}35`,
-                      boxShadow: `0 0 20px ${color}12`,
-                    }
-                  : {
-                      background: "rgba(255,255,255,0.025)",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                    }
-              }
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-            >
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: active === id ? `${color}20` : "rgba(255,255,255,0.05)",
-                  border: `1px solid ${active === id ? color + "40" : "rgba(255,255,255,0.08)"}`,
-                }}
+          {CASE_STUDIES.map(({ id, icon: Icon, label, title, color }) => {
+            const isActive = active === id;
+            return (
+              <motion.button
+                key={id}
+                onClick={() => setActive(id)}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.99 }}
+                className="relative flex items-start gap-3 p-4 rounded-2xl text-left cursor-pointer overflow-hidden transition-colors duration-300"
+                style={
+                  isActive
+                    ? {
+                        background: `${color}12`,
+                        border: `1px solid ${color}40`,
+                        boxShadow: `0 8px 28px ${color}16`,
+                      }
+                    : {
+                        background: "rgba(255,255,255,0.025)",
+                        border: "1px solid rgba(255,255,255,0.07)",
+                      }
+                }
               >
-                <Icon size={14} style={{ color: active === id ? color : "rgba(255,255,255,0.4)" }} />
-              </div>
-              <div>
-                <div className="text-[10px] text-white/35">{label}</div>
+                {isActive && (
+                  <motion.span
+                    layoutId="case-underline"
+                    className="absolute inset-x-0 bottom-0 h-[2px]"
+                    style={{ background: color }}
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                  />
+                )}
                 <div
-                  className="text-xs font-semibold"
-                  style={{ color: active === id ? "white" : "rgba(255,255,255,0.6)" }}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300"
+                  style={{
+                    background: isActive ? `${color}20` : "rgba(255,255,255,0.05)",
+                    border: `1px solid ${
+                      isActive ? color + "40" : "rgba(255,255,255,0.08)"
+                    }`,
+                  }}
                 >
-                  {title}
+                  <Icon
+                    size={15}
+                    style={{
+                      color: isActive ? color : "rgba(255,255,255,0.4)",
+                    }}
+                  />
                 </div>
-              </div>
-              {active === id && (
-                <ChevronRight size={14} className="ml-auto flex-shrink-0" style={{ color }} />
-              )}
-            </motion.button>
-          ))}
+                <div className="min-w-0">
+                  <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-white/30">
+                    {label}
+                  </div>
+                  <div
+                    className="text-[13px] font-semibold mt-1 leading-snug transition-colors duration-300"
+                    style={{
+                      color: isActive ? "#fff" : "rgba(255,255,255,0.6)",
+                    }}
+                  >
+                    {title}
+                  </div>
+                </div>
+              </motion.button>
+            );
+          })}
         </motion.div>
 
-        {/* Case study content */}
+        {/* Content â€” narrative left, sticky code right */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.35 }}
-            className="grid lg:grid-cols-2 gap-6"
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.4, ease: EASE_OUT }}
+            className="grid lg:grid-cols-12 gap-5"
           >
-            {/* Details */}
-            <div className="space-y-4">
+            {/* Narrative */}
+            <div className="lg:col-span-7 space-y-3">
               <div
-                className="p-6 rounded-2xl"
+                className="relative overflow-hidden rounded-2xl p-6"
                 style={{
-                  background: `${activeStudy.color}08`,
-                  border: `1px solid ${activeStudy.color}20`,
+                  background: `linear-gradient(135deg, ${activeStudy.color}10, rgba(0,0,0,0.25))`,
+                  border: `1px solid ${activeStudy.color}26`,
                 }}
               >
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3.5 mb-4">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center"
                     style={{
-                      background: `${activeStudy.color}15`,
-                      border: `1px solid ${activeStudy.color}30`,
+                      background: `${activeStudy.color}18`,
+                      border: `1px solid ${activeStudy.color}33`,
                     }}
                   >
-                    <activeStudy.icon size={18} style={{ color: activeStudy.color }} />
+                    <activeStudy.icon size={19} style={{ color: activeStudy.color }} />
                   </div>
                   <div>
-                    <div className="text-xs text-white/35">{activeStudy.label}</div>
-                    <div className="text-base font-bold text-white">{activeStudy.title}</div>
+                    <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-white/30">
+                      {activeStudy.label}
+                    </div>
+                    <div className="text-lg font-bold text-white tracking-tight">
+                      {activeStudy.title}
+                    </div>
                   </div>
                 </div>
-                <p className="text-sm text-white/50 leading-relaxed">
+                <p className="text-[15px] text-white/55 leading-relaxed">
                   {activeStudy.subtitle}
                 </p>
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-20 -top-20 w-56 h-56 rounded-full"
+                  style={{
+                    background: `radial-gradient(circle, ${activeStudy.color}20 0%, transparent 70%)`,
+                    filter: "blur(30px)",
+                  }}
+                />
               </div>
 
-              {activeStudy.sections.map(({ icon: Icon, title, content }) => (
-                <div
+              {activeStudy.sections.map(({ icon: Icon, title, content }, i) => (
+                <motion.div
                   key={title}
-                  className="p-4 rounded-xl"
-                  style={{
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08 + i * 0.07, duration: 0.5, ease: EASE_OUT }}
+                  className="surface-card p-5"
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icon size={13} className="text-white/40" />
-                    <span className="text-xs font-semibold text-white">{title}</span>
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <span
+                      className="w-6 h-6 rounded-lg flex items-center justify-center"
+                      style={{
+                        background: `${activeStudy.color}14`,
+                        border: `1px solid ${activeStudy.color}26`,
+                      }}
+                    >
+                      <Icon size={12} style={{ color: activeStudy.color }} />
+                    </span>
+                    <span className="text-[13px] font-semibold text-white">
+                      {title}
+                    </span>
+                    <span className="ml-auto font-mono text-[10px] text-white/20 tabular-nums">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                   </div>
-                  <p className="text-sm text-white/50 leading-relaxed">{content}</p>
-                </div>
+                  <p className="text-[14px] text-white/50 leading-relaxed">{content}</p>
+                </motion.div>
               ))}
             </div>
 
-            {/* Code snippet */}
-            <div>
+            {/* Code */}
+            <div className="lg:col-span-5">
               <div
-                className="rounded-2xl overflow-hidden h-full"
+                className="rounded-2xl overflow-hidden lg:sticky lg:top-24"
                 style={{
-                  background: "rgba(0,0,0,0.5)",
-                  border: `1px solid ${activeStudy.color}20`,
+                  background: "rgba(0,0,0,0.55)",
+                  border: `1px solid ${activeStudy.color}26`,
+                  boxShadow: "0 18px 60px rgba(0,0,0,0.45)",
                 }}
               >
-                {/* Code header */}
                 <div
                   className="flex items-center justify-between px-4 py-3 border-b"
                   style={{ borderColor: "rgba(255,255,255,0.06)" }}
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-red-500/60" />
-                    <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
-                    <div className="w-2 h-2 rounded-full bg-green-500/60" />
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Code2 size={11} className="text-white/30" />
-                    <span className="text-xs text-white/30 font-mono">
+                    <span className="text-[11px] text-white/35 font-mono">
                       {active === "cicd" ? "deploy.yml" : "implementation.ts"}
                     </span>
                   </div>
                   <div
-                    className="text-[10px] px-2 py-0.5 rounded"
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-full"
                     style={{
                       background: `${activeStudy.color}15`,
                       color: activeStudy.color,
-                      border: `1px solid ${activeStudy.color}25`,
+                      border: `1px solid ${activeStudy.color}28`,
                     }}
                   >
-                    Production
+                    prod
                   </div>
                 </div>
 
-                {/* Code body */}
-                <pre
-                  className="p-5 text-xs leading-relaxed overflow-x-auto text-white/70 font-mono"
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                >
+                <pre className="p-5 text-[12px] leading-relaxed overflow-x-auto text-white/70 font-mono">
                   <code>{activeStudy.codeSnippet}</code>
                 </pre>
 
-                {/* Bottom CTA */}
                 <div
-                  className="px-5 py-4 border-t flex items-center justify-between"
+                  className="px-5 py-4 border-t flex items-center justify-between gap-3"
                   style={{ borderColor: "rgba(255,255,255,0.05)" }}
                 >
                   <div className="flex items-center gap-2">
-                    <CheckCircle size={12} className="text-emerald-400" />
-                    <span className="text-xs text-white/40">Deployed in production</span>
+                    <CheckCircle size={13} className="text-emerald-400" />
+                    <span className="text-xs text-white/45">
+                      Deployed in production
+                    </span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs" style={{ color: activeStudy.color }}>
+                  <div
+                    className="flex items-center gap-1 text-xs"
+                    style={{ color: activeStudy.color }}
+                  >
                     <span>View full implementation</span>
                     <ArrowRight size={11} />
                   </div>
