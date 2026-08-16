@@ -2,17 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/*
+ * Fonts are loaded by next/font in src/app/layout.tsx:
+ *   Inter          -> --font-inter          (font-sans)
+ *   JetBrains Mono -> --font-jetbrains-mono (font-mono)
+ * Do not re-import them from a CDN here.
+ */
 
 :root {
+  /* Surfaces */
   --background: #08080f;
   --surface: #0d0d1a;
   --card: #111124;
   --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  /* Brand anchor */
   --primary: #6366f1;
+  --primary-soft: rgba(99, 102, 241, 0.12);
+  --primary-line: rgba(99, 102, 241, 0.25);
   --secondary: #8b5cf6;
   --accent: #06b6d4;
+
+  /* Signature warm accent — focal moments only */
+  --sig-warm: #fbbf24;
+  --sig-mid: #fb7185;
+  --sig-deep: #c026d3;
+  --sig-gradient: linear-gradient(120deg, var(--sig-warm) 0%, var(--sig-mid) 48%, var(--sig-deep) 100%);
+  --sig-glow: rgba(251, 113, 133, 0.35);
+
+  /* Type */
   --text: #f1f5f9;
+  --text-dim: rgba(255, 255, 255, 0.55);
+  --text-faint: rgba(255, 255, 255, 0.35);
   --muted: #475569;
   --subtle: #1e1e38;
 }
@@ -32,9 +54,29 @@ html {
 body {
   background-color: var(--background);
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
   overflow-x: hidden;
   cursor: none;
+}
+
+/* Touch / coarse pointers never see the custom cursor — give them a real one back. */
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 /* Custom scrollbar */
@@ -45,25 +87,27 @@ body {
   background: var(--surface);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
+  background: linear-gradient(180deg, var(--primary), var(--secondary));
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+  background: var(--sig-mid);
 }
 
-/* Selection */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(251, 113, 133, 0.35);
   color: #ffffff;
 }
 
-/* Glassmorphism utility */
+/* ---------------------------------------------------------------
+   Surfaces
+   --------------------------------------------------------------- */
+
 .glass {
   background: rgba(17, 17, 36, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border);
 }
 
 .glass-light {
@@ -73,12 +117,67 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Aurora text gradient */
+/* The default panel used across sections instead of per-file inline rgba. */
+.surface-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  transition: border-color 0.35s ease, background-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+.surface-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-strong);
+}
+
+.surface-card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* Deep inset panel — code blocks, terminals, diagrams. */
+.surface-inset {
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+/* Hairline divider that sits at the top of every section. */
+.section-hairline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--primary-line),
+    rgba(251, 113, 133, 0.22),
+    transparent
+  );
+}
+
+/* ---------------------------------------------------------------
+   Type & accents
+   --------------------------------------------------------------- */
+
 .gradient-text {
   background: linear-gradient(135deg, #818cf8 0%, #a78bfa 40%, #38bdf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Signature warm gradient — the one "wow" accent. Use sparingly. */
+.gradient-text-signature {
+  background: var(--sig-gradient);
+  background-size: 180% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-x 9s ease-in-out infinite;
 }
 
 .gradient-text-aurora {
@@ -90,7 +189,93 @@ body {
   animation: gradient-x 4s linear infinite;
 }
 
-/* Glow border */
+.eyebrow,
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.section-label-accent {
+  color: var(--sig-mid);
+}
+
+.text-display {
+  font-size: clamp(2.75rem, 6.5vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.text-hero {
+  font-size: clamp(3.25rem, 9vw, 8rem);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------
+   Chips & buttons
+   --------------------------------------------------------------- */
+
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-line);
+  color: #a5b4fc;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.tech-tag:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #c7d2fe;
+}
+
+/* Primary CTA — the signature gradient lives here. */
+.btn-signature {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--sig-gradient);
+  background-size: 180% auto;
+  color: #140a10;
+  font-weight: 700;
+  box-shadow: 0 8px 28px rgba(251, 113, 133, 0.28);
+  transition: background-position 0.6s ease, box-shadow 0.35s ease;
+}
+.btn-signature:hover {
+  background-position: 100% 50%;
+  box-shadow: 0 10px 36px rgba(251, 113, 133, 0.42);
+}
+
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------------------------------------------------------------
+   Decorative
+   --------------------------------------------------------------- */
+
 .glow-border {
   position: relative;
 }
@@ -99,7 +284,12 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(139,92,246,0.5), rgba(6,182,212,0.5));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.5),
+    rgba(139, 92, 246, 0.5),
+    rgba(251, 113, 133, 0.45)
+  );
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -108,7 +298,6 @@ body {
   opacity: 1;
 }
 
-/* Noise texture overlay */
 .noise::after {
   content: '';
   position: absolute;
@@ -118,7 +307,6 @@ body {
   z-index: 0;
 }
 
-/* Shimmer effect */
 .shimmer-card {
   position: relative;
   overflow: hidden;
@@ -133,49 +321,33 @@ body {
   background: linear-gradient(
     105deg,
     transparent 40%,
-    rgba(255,255,255,0.03) 50%,
+    rgba(255, 255, 255, 0.03) 50%,
     transparent 60%
   );
   animation: shimmer 3s ease-in-out infinite;
 }
 
-@keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.grid-bg {
+  background-image: linear-gradient(rgba(99, 102, 241, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%) rotate(25deg); }
-  100% { transform: translateX(100%) rotate(25deg); }
+/* Radial mask so the grid fades out rather than hitting a hard edge. */
+.grid-mask {
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 20%, transparent 100%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 20%, transparent 100%);
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-16px); }
+.code-block {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--primary-line);
+  border-radius: 8px;
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes beam {
-  0% { transform: translateX(-100%) skewX(-15deg); }
-  100% { transform: translateX(200%) skewX(-15deg); }
-}
-
-/* Section fade in */
-.section-enter {
-  opacity: 0;
-  transform: translateY(40px);
-}
-.section-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-/* Custom cursor */
 .custom-cursor {
   position: fixed;
   pointer-events: none;
@@ -183,63 +355,54 @@ body {
   mix-blend-mode: difference;
 }
 
-/* Code block styling */
-.code-block {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  line-height: 1.6;
+/* ---------------------------------------------------------------
+   Keyframes
+   --------------------------------------------------------------- */
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
-/* Tag chips */
-.tech-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.25);
-  color: #a5b4fc;
-  transition: all 0.2s ease;
-}
-.tech-tag:hover {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.5);
-  color: #c7d2fe;
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(25deg);
+  }
 }
 
-/* Section headings */
-.section-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--primary);
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
 }
 
-/* Grid bg */
-.grid-bg {
-  background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
-/* Responsive text */
-.text-display {
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-
-.text-hero {
-  font-size: clamp(3rem, 8vw, 7rem);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.04em;
+@keyframes beam {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
 }

@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// Used for code snippets, terminal panels, and metric/period labels.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -140,7 +147,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+      >
         {children}
         <Toaster
           theme="dark"
