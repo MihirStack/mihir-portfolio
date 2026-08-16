@@ -32,6 +32,8 @@ export const SUMMARY =
 export type Experience = {
   id: string;
   company: string;
+  companyLogo: string;
+  companyWebsite: string;
   monogram: string;
   role: string;
   period: string;
@@ -52,6 +54,8 @@ export const EXPERIENCES: Experience[] = [
   {
     id: "aksharpos",
     company: "Codebrain Infotech → Logicode Software LLP",
+    companyLogo: "/logos/logicode.svg",
+    companyWebsite: "https://logicodesoftware.com",
     monogram: "A",
     role: "Full Stack Engineer — AksharPOS Product",
     period: "Aug 2025 — Present",
@@ -99,6 +103,8 @@ export const EXPERIENCES: Experience[] = [
   {
     id: "codebrain-service",
     company: "Codebrain Infotech",
+    companyLogo: "/logos/codebrain.png",
+    companyWebsite: "https://codebraininfotech.com",
     monogram: "C",
     role: "Full Stack Developer — Service-Based",
     period: "Jul 2025 (1 month)",
@@ -121,6 +127,8 @@ export const EXPERIENCES: Experience[] = [
   {
     id: "di-solutions",
     company: "DI Solutions",
+    companyLogo: "/logos/di-solutions.svg",
+    companyWebsite: "https://disolutions.net",
     monogram: "D",
     role: "Full Stack Developer",
     period: "Jul 2023 — Jun 2025",

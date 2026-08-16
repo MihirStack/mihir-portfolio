@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import {
@@ -10,6 +11,7 @@ import {
   Trophy,
   TrendingUp,
   ArrowUpRight,
+  Globe,
 } from "lucide-react";
 import { EXPERIENCES } from "@/data/portfolio";
 
@@ -193,25 +195,36 @@ export default function Experience() {
                 {/* Header row */}
                 <div className="flex flex-wrap items-start justify-between gap-5 mb-7">
                   <div className="flex items-center gap-4">
-                    <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-2xl text-white"
-                      style={{
-                        background: `linear-gradient(140deg, ${activeExp.color}, ${activeExp.color}88)`,
-                        boxShadow: `0 10px 30px ${activeExp.color}50`,
-                      }}
+                    <a
+                      href={activeExp.companyWebsite}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit ${activeExp.company} website`}
+                      className="relative w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-white p-2 transition-transform duration-300 hover:scale-105"
+                      style={{ boxShadow: `0 10px 30px ${activeExp.color}50` }}
                     >
-                      {activeExp.monogram}
-                    </div>
+                      <Image
+                        src={activeExp.companyLogo}
+                        alt={`${activeExp.company} logo`}
+                        fill
+                        sizes="56px"
+                        className="object-contain p-2"
+                      />
+                    </a>
                     <div>
                       <h3 className="text-xl md:text-2xl font-black text-white leading-tight tracking-tight">
                         {activeExp.role}
                       </h3>
-                      <div
-                        className="text-sm mt-0.5"
+                      <a
+                        href={activeExp.companyWebsite}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm mt-0.5 hover:underline underline-offset-2"
                         style={{ color: activeExp.color }}
                       >
                         {activeExp.company}
-                      </div>
+                        <Globe size={11} className="opacity-60" />
+                      </a>
                     </div>
                   </div>
 
