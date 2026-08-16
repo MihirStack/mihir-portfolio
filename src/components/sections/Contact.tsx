@@ -232,7 +232,7 @@ export default function Contact() {
             {/* Resume download */}
             <motion.a
               href="/resume.pdf"
-              download
+              download="Mihir_Borsaniya_Resume.pdf"
               className="flex items-center justify-center gap-2 w-full p-4 rounded-xl font-semibold text-sm text-white transition-all"
               style={{
                 background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2))",

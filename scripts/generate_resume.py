@@ -41,35 +41,36 @@ contact_style = ParagraphStyle(
 )
 section_style = ParagraphStyle(
     "Section", parent=styles["Heading2"], fontName="Helvetica-Bold",
-    fontSize=10.5, textColor=INDIGO, leading=13, spaceBefore=8, spaceAfter=3,
+    fontSize=10.2, textColor=INDIGO, leading=12.5, spaceBefore=5, spaceAfter=2.5,
+    keepWithNext=1,
 )
 body_style = ParagraphStyle(
     "Body", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.8, textColor=INK, leading=12.5, alignment=TA_LEFT,
+    fontSize=8.4, textColor=INK, leading=11.5, alignment=TA_LEFT,
 )
 bullet_style = ParagraphStyle(
     "Bullet", parent=body_style, leftIndent=10, bulletIndent=0,
-    spaceAfter=1.5, fontSize=8.8, leading=12,
+    spaceAfter=0.8, fontSize=8.4, leading=11,
 )
 role_style = ParagraphStyle(
     "Role", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=9.8, textColor=INK, leading=12.5,
+    fontSize=9.6, textColor=INK, leading=12,
 )
 meta_style = ParagraphStyle(
     "Meta", parent=styles["Normal"], fontName="Helvetica-Oblique",
-    fontSize=8.3, textColor=LIGHT, leading=12,
+    fontSize=8.1, textColor=LIGHT, leading=11.5,
 )
 company_style = ParagraphStyle(
     "Company", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.6, textColor=SLATE, leading=11.5, spaceAfter=1,
+    fontSize=8.4, textColor=SLATE, leading=11, spaceAfter=1,
 )
 skill_label = ParagraphStyle(
     "SkillLabel", parent=styles["Normal"], fontName="Helvetica-Bold",
-    fontSize=8.8, textColor=VIOLET, leading=11.5,
+    fontSize=8.6, textColor=VIOLET, leading=11,
 )
 skill_val = ParagraphStyle(
     "SkillVal", parent=styles["Normal"], fontName="Helvetica",
-    fontSize=8.8, textColor=INK, leading=11.5,
+    fontSize=8.6, textColor=INK, leading=11,
 )
 
 
@@ -104,8 +105,8 @@ def role_row(role, period):
 def build(path):
     doc = SimpleDocTemplate(
         path, pagesize=A4,
-        leftMargin=16 * mm, rightMargin=16 * mm,
-        topMargin=11 * mm, bottomMargin=11 * mm,
+        leftMargin=15 * mm, rightMargin=15 * mm,
+        topMargin=8 * mm, bottomMargin=7 * mm,
         title="Mihir Borsaniya - Resume",
         author="Mihir Borsaniya",
         subject="Full Stack Engineer Resume",
@@ -166,7 +167,7 @@ def build(path):
         s.append(role_row(role, period))
         s.append(Paragraph(company, company_style))
         s += bullets(pts)
-        s.append(Spacer(1, 3))
+        s.append(Spacer(1, 2))
 
     # ---- Projects ----
     s += section("Projects")
@@ -205,8 +206,8 @@ def build(path):
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 1.5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
+        ("TOPPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
     ]))
     s.append(tbl)
 

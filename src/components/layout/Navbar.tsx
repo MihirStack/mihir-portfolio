@@ -112,7 +112,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               <motion.a
                 href="/resume.pdf"
-                download
+                download="Mihir_Borsaniya_Resume.pdf"
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white/70 hover:text-white border border-white/10 hover:border-white/20 rounded-lg transition-all"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
@@ -177,7 +177,7 @@ export default function Navbar() {
               <div className="flex gap-2 mt-2 pt-2 border-t border-white/5">
                 <a
                   href="/resume.pdf"
-                  download
+                  download="Mihir_Borsaniya_Resume.pdf"
                   className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-medium text-white/70 border border-white/10 rounded-lg"
                 >
                   <Download size={13} />

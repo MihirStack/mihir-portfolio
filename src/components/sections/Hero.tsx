@@ -249,7 +249,7 @@ export default function Hero() {
 
               <motion.a
                 href="/resume.pdf"
-                download
+                download="Mihir_Borsaniya_Resume.pdf"
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white/80 hover:text-white border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
