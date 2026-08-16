@@ -227,6 +227,7 @@ body {
 .tech-tag {
   display: inline-flex;
   align-items: center;
+  gap: 5px;
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 0.72rem;

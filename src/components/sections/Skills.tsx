@@ -13,6 +13,7 @@ import {
   GitBranch,
   Cpu,
 } from "lucide-react";
+import { TechIcon } from "@/lib/tech-icons";
 
 const SKILL_CATEGORIES = [
   {
@@ -368,6 +369,7 @@ export default function Skills() {
                 transition={{ delay: 0.5 + i * 0.02 }}
                 className="tech-tag text-[11px] py-1"
               >
+                <TechIcon name={tech} size={11} />
                 {tech}
               </motion.span>
             ))}

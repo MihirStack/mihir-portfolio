@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import { TechIcon } from "@/lib/tech-icons";
 
 const STATS = [
   { value: 3, suffix: "+", label: "Years Experience" },
@@ -190,6 +191,7 @@ export default function Hero() {
                   transition={{ delay: 0.42 + i * 0.035, duration: 0.4 }}
                   className="tech-tag"
                 >
+                  <TechIcon name={tech} />
                   {tech}
                 </motion.span>
               ))}

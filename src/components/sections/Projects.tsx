@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { TechIcon } from "@/lib/tech-icons";
 import {
   Package,
   ShoppingCart,
@@ -227,6 +228,7 @@ export default function Projects() {
                 <div className="flex flex-wrap gap-1.5">
                   {FLAGSHIP_TECH.map((tech) => (
                     <span key={tech} className="tech-tag">
+                      <TechIcon name={tech} />
                       {tech}
                     </span>
                   ))}
@@ -437,13 +439,14 @@ export default function Projects() {
                     {tech.map((t) => (
                       <span
                         key={t}
-                        className="text-[10px] px-2 py-0.5 rounded-md"
+                        className="inline-flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-md"
                         style={{
                           background: "rgba(255,255,255,0.04)",
                           border: "1px solid rgba(255,255,255,0.08)",
                           color: "rgba(255,255,255,0.6)",
                         }}
                       >
+                        <TechIcon name={t} size={10} />
                         {t}
                       </span>
                     ))}

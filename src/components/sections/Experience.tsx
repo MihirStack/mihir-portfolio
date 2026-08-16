@@ -14,6 +14,7 @@ import {
   Globe,
 } from "lucide-react";
 import { EXPERIENCES } from "@/data/portfolio";
+import { TechIcon } from "@/lib/tech-icons";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -361,6 +362,7 @@ export default function Experience() {
                   <div className="flex flex-wrap gap-1.5">
                     {activeExp.tech.map((t) => (
                       <span key={t} className="tech-tag">
+                        <TechIcon name={t} />
                         {t}
                       </span>
                     ))}
