@@ -64,7 +64,7 @@ const MORE_PROJECTS = [
     title: "Medical & Manufacturing ERP",
     color: "#8b5cf6",
     challenge:
-      "Run multiple business domains â€” medical, manufacturing, ecommerce, and POS â€” on one stack.",
+      "Run multiple business domains — medical, manufacturing, ecommerce, and POS — on one stack.",
     solution:
       "Delivered purchase, inventory, and shipment modules with real-time flows via Socket.IO, Redis caching, and multi-gateway checkout.",
     impact: "Multi-region payments through Razorpay, Stripe, and PayPal.",
@@ -187,7 +187,7 @@ export default function Projects() {
                       AksharPOS ERP
                     </div>
                     <div className="text-[11px] font-mono text-white/40 mt-0.5">
-                      Multi-Tenant SaaS Â· Production Â· @ Logicode
+                      Multi-Tenant SaaS · Production · @ Logicode
                     </div>
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export default function Projects() {
                 <p className="text-white/60 text-[15px] leading-relaxed mb-7">
                   A complete business management platform that handles everything from
                   touchscreen POS billing to complex inventory management, multi-branch
-                  operations, supplier management, and financial reporting â€” all within a
+                  operations, supplier management, and financial reporting — all within a
                   secure multi-tenant architecture that isolates each business&apos;s data.
                 </p>
 

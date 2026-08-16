@@ -24,28 +24,28 @@ const INFRA_LAYERS = [
   {
     icon: Shield,
     label: "NGINX Reverse Proxy",
-    sublabel: "SSL Termination Â· Load Balancing",
+    sublabel: "SSL Termination · Load Balancing",
     color: "#f59e0b",
     detail: "Handles HTTPS, routes /api/* to Node.js, serves static assets directly",
   },
   {
     icon: Server,
     label: "Node.js / Express API",
-    sublabel: "REST APIs Â· JWT Auth Â· Middleware",
+    sublabel: "REST APIs · JWT Auth · Middleware",
     color: "#6366f1",
     detail: "Multi-tenant middleware, RBAC, rate limiting, request validation",
   },
   {
     icon: Cpu,
     label: "PM2 Cluster Mode",
-    sublabel: "Process Manager Â· Zero-Downtime",
+    sublabel: "Process Manager · Zero-Downtime",
     color: "#8b5cf6",
     detail: "Cluster mode with N-1 CPU workers, graceful reloads, log rotation",
   },
   {
     icon: Database,
     label: "MySQL Databases",
-    sublabel: "Per-Tenant Isolated Â· Connection Pool",
+    sublabel: "Per-Tenant Isolated · Connection Pool",
     color: "#10b981",
     detail: "Master DB for tenant registry, individual DBs per tenant with LRU pooling",
   },
@@ -256,7 +256,7 @@ export default function DevOps() {
               >
                 <CheckCircle size={14} className="text-[#fda4af] flex-shrink-0" />
                 <span className="text-[13px] text-white/70">
-                  30 min manual â†’ <span className="font-semibold text-white">4 min</span>{" "}
+                  30 min manual → <span className="font-semibold text-white">4 min</span>{" "}
                   automated, zero downtime
                 </span>
               </div>
